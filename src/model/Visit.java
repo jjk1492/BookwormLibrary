@@ -1,3 +1,7 @@
+package model;
+
+import model.Visitor;
+
 /**
  * Represents a visit, one is created each time a visitor enters the library. Tracks the time of the visit, the date, and who visited.
  *

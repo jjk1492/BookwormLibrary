@@ -1,3 +1,5 @@
+package model;
+
 public class Visitor {
 
     private String firstName;
@@ -13,4 +15,10 @@ public class Visitor {
         this.phoneNumber = phoneNumber;
         this.userID = userID;
     }
+
+    public String getUserID() {
+        return userID;
+    }
+
+
 }
