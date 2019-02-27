@@ -42,5 +42,8 @@ public class BookwormLibrary {
         return LibraryInstance.INSTANCE;
     }
 
+    public boolean registerUser(String firstName, String lastName, String address, String phoneNumber, String userID){
+        return false;
+    }
 
 }
