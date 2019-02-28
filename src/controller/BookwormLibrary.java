@@ -4,6 +4,7 @@ import model.Book;
 import model.Visitor;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Represents the Bookworm Library. Holds all the books, visitors, and visits to the library.
@@ -60,10 +61,7 @@ public class BookwormLibrary {
      */
     public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
         Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, "TestUser");
-        if( this.visitors.containsValue(temp) ){
-            return false;
-        }
-        return true;
+        return !this.visitors.containsValue(temp);
     }
 
     /**
@@ -74,7 +72,23 @@ public class BookwormLibrary {
      * @param phoneNumber - Visitor's phone number
      */
     public void registerUser(String firstName, String lastName, String address, String phoneNumber, String userID){
-
+        if( verifyUser(firstName, lastName, address, phoneNumber)){
+            Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
+            visitors.put(userID, newVisitor);
+        }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookwormLibrary that = (BookwormLibrary) o;
+        return books.equals(that.books) &&
+                visitors.equals(that.visitors);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(books, visitors);
+    }
 }
