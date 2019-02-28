@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A book belonging to the controller.BookwormLibrary. Books are created when their purchased, or loaded in from persistent data.
@@ -19,8 +20,8 @@ public class Book{
     private int numberOfCheckedOut;
 
     //Used for fine tracking
-    private String checkOutDate;
-    private String checkInDate;
+    private Date checkOutDate;
+    private Date checkInDate;
 
 
     /**
@@ -42,6 +43,9 @@ public class Book{
         this.numberOfCopies = numberOfCopies;
         this.numberOfCheckedOut = numberOfCheckedOut;
 
+        this.checkOutDate = null;
+        this.checkInDate = null;
+
     }
 
     /**
@@ -51,5 +55,6 @@ public class Book{
     public String getISBN(){
         return this.ISBN;
     }
+    
 
 }
