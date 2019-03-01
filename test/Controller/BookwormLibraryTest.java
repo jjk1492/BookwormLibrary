@@ -46,13 +46,14 @@ public class BookwormLibraryTest {
     @Test
     public void registerUserTest(){
 
-        HashMap<String, Visitor> visitors = new HashMap<>();
-        HashMap<String, Book> books = new HashMap<>();
-
         //Create an expected outcome bookworm library
         HashMap<String, Visitor> expectedVisitors = new HashMap<>();
         Visitor CeeMoore = new Visitor("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
         expectedVisitors.put(CeeMoore.getUserID(), CeeMoore);
+
+        //Initialize the HashMaps for books and visitors
+        HashMap<String, Visitor> visitors = new HashMap<>();
+        HashMap<String, Book> books = new HashMap<>();
 
         BookwormLibrary expected = new BookwormLibrary(books, expectedVisitors);
 
@@ -64,6 +65,4 @@ public class BookwormLibraryTest {
         assertEquals(expected, cut);
 
     }
-
-
 }

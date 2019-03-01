@@ -52,7 +52,6 @@ public class CheckOut {
         return visitor;
     }
 
-
     public Calendar getDueDate() {
         return dueDate;
     }

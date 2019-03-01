@@ -125,6 +125,10 @@ public class BookwormLibrary {
         return false;
     }
 
+    public String checkIn(String visitorID, ArrayList<String> bookIDs){
+        return "Yo mama";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
