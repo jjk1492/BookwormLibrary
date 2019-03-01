@@ -1,10 +1,10 @@
 package controller;
 
 import model.Book;
+import model.CheckOut;
 import model.Visitor;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents the Bookworm Library. Holds all the books, visitors, and visits to the library.
@@ -16,11 +16,15 @@ public class BookwormLibrary {
 
     private static BookwormLibrary INSTANCE = new BookwormLibrary();
 
+    private final static int MAX_NUM_CHECKOUTS = 5;
+
     //HashMap key is the ISBN of the book
     private HashMap<String, Book> books;
 
     //HashMap key is the visitors uniqueID
     private HashMap<String, Visitor> visitors;
+
+    private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
 
     /**
      * Lazy constructor
@@ -30,6 +34,7 @@ public class BookwormLibrary {
     private BookwormLibrary(){
         this.books = new HashMap<>();
         this.visitors = new HashMap<>();
+        this.checkedOutBooks = new HashMap<>();
     }
 
     /**
@@ -37,9 +42,10 @@ public class BookwormLibrary {
      * @param books - HashMap for the books
      * @param visitors - HashMap for the visitors
      */
-    public BookwormLibrary(HashMap<String, Book> books, HashMap<String, Visitor> visitors){
+    public BookwormLibrary(HashMap<String, Book> books, HashMap<String, Visitor> visitors, HashMap<String, ArrayList<CheckOut>> checkOuts){
         this.books = books;
         this.visitors = visitors;
+        this.checkedOutBooks = checkOuts;
     }
 
 
@@ -78,10 +84,42 @@ public class BookwormLibrary {
         }
     }
 
+    /**
+     * Checks out a book from the library
+     * @param visitorID - Visitor requesting a book check out
+     * @param bookID - Book being checked out
+     * @return boolean if the checkout was successful
+     */
     public boolean checkOut(String visitorID, String bookID){
+
+        //Ensure the requested book and user are in the system
         if( visitors.containsKey(visitorID) && books.containsKey(bookID) ){
-            Book checkOutBook = books.get(bookID);
-            checkOutBook.checkOut(visitors.get(visitorID));
+
+            Book book = books.get(bookID);
+
+            //Make a new CheckOut object and ArrayList for holding checkouts
+            CheckOut bookCheckOut = new CheckOut(book, visitors.get(visitorID), Calendar.getInstance());
+            ArrayList<CheckOut> visitorCheckOuts;
+
+            //Check if the visitor is already has books checked out
+            if(checkedOutBooks.containsKey(visitorID)){
+
+                visitorCheckOuts = this.checkedOutBooks.get(visitorID);
+
+                //Make sure the user doesn't have the max number of books checked out already
+                if( visitorCheckOuts.size() < MAX_NUM_CHECKOUTS){
+                    visitorCheckOuts.add(bookCheckOut);
+                }else {
+                    return false;
+                }
+            }else {
+                visitorCheckOuts = new ArrayList<>();
+                visitorCheckOuts.add(bookCheckOut);
+            }
+
+            //Update the system with the book checkout then return true
+            this.checkedOutBooks.put(visitorID, visitorCheckOuts);
+            book.checkOut();
             return true;
         }
         return false;

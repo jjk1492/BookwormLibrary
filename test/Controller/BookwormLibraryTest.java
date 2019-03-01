@@ -46,7 +46,6 @@ public class BookwormLibraryTest {
     @Test
     public void registerUserTest(){
 
-        //Initialize the HashMaps for books and visitors
         HashMap<String, Visitor> visitors = new HashMap<>();
         HashMap<String, Book> books = new HashMap<>();
 

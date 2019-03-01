@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -18,11 +19,6 @@ public class Book{
     private String publishDate;
     private int numberOfCopies;
     private int numberOfCheckedOut;
-
-    //Checkout information
-    private Date checkOutDate;
-    private Date checkInDate;
-    private Visitor loanedTo;
 
 
     /**
@@ -44,9 +40,6 @@ public class Book{
         this.numberOfCopies = numberOfCopies;
         this.numberOfCheckedOut = numberOfCheckedOut;
 
-        this.checkOutDate = null;
-        this.checkInDate = null;
-
     }
 
     /**
@@ -57,9 +50,16 @@ public class Book{
         return this.ISBN;
     }
 
-    public void checkOut(Visitor visitor){
-        this.loanedTo = visitor;
-        this.checkOutDate = new Date();
+    public void checkOut(){
+        if( numberOfCheckedOut < numberOfCopies){
+            this.numberOfCheckedOut++;
+        }
+    }
+
+    public void checkIn(){
+        if( numberOfCheckedOut > 0){
+            this.numberOfCheckedOut--;
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Objects;
+import java.util.Queue;
 
 /**
  * A visitor of Bookworm Library. Visitors are identified by their unique 10-digit UserID. Visitors are considered
@@ -15,7 +16,6 @@ public class Visitor {
     private String address;
     private String phoneNumber;
     private String userID;
-
     /**
      * Constructor for a visitor, contains name, contact info, and an ID number.
      * @param firstName
