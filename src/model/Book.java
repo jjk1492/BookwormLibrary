@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class Book{
 
-    //Required book variables
+    //Required book data
     private String ISBN;
     private String title;
     private ArrayList<String> authors;
@@ -19,9 +19,10 @@ public class Book{
     private int numberOfCopies;
     private int numberOfCheckedOut;
 
-    //Used for fine tracking
+    //Checkout information
     private Date checkOutDate;
     private Date checkInDate;
+    private Visitor loanedTo;
 
 
     /**
@@ -55,6 +56,10 @@ public class Book{
     public String getISBN(){
         return this.ISBN;
     }
-    
+
+    public void checkOut(Visitor visitor){
+        this.loanedTo = visitor;
+        this.checkOutDate = new Date();
+    }
 
 }
