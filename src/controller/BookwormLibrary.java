@@ -78,6 +78,15 @@ public class BookwormLibrary {
         }
     }
 
+    public boolean checkOut(String visitorID, String bookID){
+        if( visitors.containsKey(visitorID) && books.containsKey(bookID) ){
+            Book checkOutBook = books.get(bookID);
+            checkOutBook.checkOut(visitors.get(visitorID));
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
