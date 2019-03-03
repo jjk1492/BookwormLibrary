@@ -57,6 +57,7 @@ public class Visitor {
                 phoneNumber.equals(visitor.phoneNumber);
     }
 
+    @Override
     public String toString(){
         String str = this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber +
                 " " + this.userID;

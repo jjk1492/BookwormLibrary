@@ -161,7 +161,7 @@ public class BookwormLibrary {
             v.endVisit(Calendar.getInstance().getTimeInMillis());
         }
         //remove visits from arraylist
-        for (int j = 0; j < currentVisits.size(); j++) {
+        for (int j = 0; j < currentVisits.size(); j =0) {
             currentVisits.remove(j);
         }
         //creates the writer for the text file

@@ -98,10 +98,13 @@ public class BookwormLibraryTest {
         //setting up environment
         HashMap<String, Visitor> expectedVisitors = new HashMap<>();
         Visitor CeeMoore = new Visitor("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
+        Visitor BeeMoore = new Visitor("BeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
         ArrayList<Visit> v = new ArrayList<>();
         v.add(new Visit(Calendar.getInstance().getTimeInMillis(), "Feb 2nd", CeeMoore));
+        v.add(new Visit(Calendar.getInstance().getTimeInMillis(), "Feb 2nd", BeeMoore));
         HashMap<String, Visitor> visitors = new HashMap<>();
         visitors.put("CeeMoore", CeeMoore);
+        visitors.put("BeeMoore", BeeMoore);
         HashMap<String, Book> books = new HashMap<>();
         ArrayList<String> expectedAuthors = new ArrayList<>();
         Book book = new Book("9780553213119","Moby Dick", expectedAuthors,
