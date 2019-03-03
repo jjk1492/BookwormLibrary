@@ -17,6 +17,17 @@ public class BookwormLibrary {
     private static BookwormLibrary INSTANCE = new BookwormLibrary();
 
     private final static int MAX_NUM_CHECKOUTS = 5;
+    private final static double NO_FINE = 0.00;
+
+    //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
+    //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
+    private final static String OVERDUE_BOOK = "Overdue:";
+    private final static String SUCCESS = "Success";
+    private final static String NOT_OWN_BOOK = "Error:You must return your own book.";
+    private final static String INVALID_VISITOR = "Error:invalid-visitor-id.";
+    private final static String NO_CHECKOUTS = "Error:Visitor doesn't have any books checked out.";
+    private final static String INVALID_BOOK = "Error:invalid-book-id:";
+    private final static String MAX_CHECKOUTS_EXCEEDED = "Error:max-checkout-exceeded";
 
     //HashMap key is the ISBN of the book
     private HashMap<String, Book> books;
@@ -87,46 +98,120 @@ public class BookwormLibrary {
     /**
      * Checks out a book from the library
      * @param visitorID - Visitor requesting a book check out
-     * @param bookID - Book being checked out
+     * @param bookIDs - Book being checked out
      * @return boolean if the checkout was successful
      */
-    public boolean checkOut(String visitorID, String bookID){
+    public String checkOut(String visitorID, ArrayList<String> bookIDs){
 
         //Ensure the requested book and user are in the system
-        if( visitors.containsKey(visitorID) && books.containsKey(bookID) ){
+        if( visitors.containsKey(visitorID) ){
 
-            Book book = books.get(bookID);
-
-            //Make a new CheckOut object and ArrayList for holding checkouts
-            CheckOut bookCheckOut = new CheckOut(book, visitors.get(visitorID), Calendar.getInstance());
-            ArrayList<CheckOut> visitorCheckOuts;
-
-            //Check if the visitor is already has books checked out
-            if(checkedOutBooks.containsKey(visitorID)){
-
-                visitorCheckOuts = this.checkedOutBooks.get(visitorID);
-
-                //Make sure the user doesn't have the max number of books checked out already
-                if( visitorCheckOuts.size() < MAX_NUM_CHECKOUTS){
-                    visitorCheckOuts.add(bookCheckOut);
-                }else {
-                    return false;
+            if( checkedOutBooks.containsKey(visitorID) ){
+                if( checkedOutBooks.get(visitorID).size() + bookIDs.size() > MAX_NUM_CHECKOUTS ){
+                    return MAX_CHECKOUTS_EXCEEDED;
                 }
-            }else {
-                visitorCheckOuts = new ArrayList<>();
-                visitorCheckOuts.add(bookCheckOut);
             }
 
-            //Update the system with the book checkout then return true
-            this.checkedOutBooks.put(visitorID, visitorCheckOuts);
-            book.checkOut();
-            return true;
+            //Ensure requested books are owned by bookworm library
+            ArrayList<String> bookReturn = new ArrayList<>();
+            for( String bookID : bookIDs ){
+               if( !this.books.containsKey(bookID) ){
+                   bookReturn.add(bookID);
+               }
+            }
+
+            if( bookReturn.size() > 0 ){
+                return INVALID_BOOK + bookReturn.toString();
+            }
+
+            ArrayList<CheckOut> checkOuts = new ArrayList<>();
+            for( String bookID : bookIDs ){
+                Book toCheckout = this.books.get(bookID);
+                toCheckout.checkOut();
+                checkOuts.add(new CheckOut(toCheckout, this.visitors.get(visitorID), Calendar.getInstance()));
+            }
+
+            this.checkedOutBooks.put(visitorID, checkOuts);
+            return SUCCESS;
         }
-        return false;
+        return INVALID_VISITOR;
     }
 
+    /**
+     * Check in a book, when books are checked in their validated, checked-in, then return a fine if the any books are overdue.
+     * @param visitorID - ID of the visitor checkin in a book
+     * @param bookIDs - Array of book ISBNs that are being checked in by the visitor
+     * @return - Stringing explaining the error or telling the fee amount.
+     */
     public String checkIn(String visitorID, ArrayList<String> bookIDs){
-        return "Yo mama";
+
+        //Check that the visitor is part of this library
+        if( visitors.containsKey(visitorID) ){
+
+            //Check the visitor has books checked out
+            if( checkedOutBooks.containsKey(visitorID) ){
+
+                //Check that the books requested to return are books owned by the library
+                ArrayList<String> bookReturn = new ArrayList<>();
+                for( String bookID : bookIDs){
+                    if( !books.containsKey(bookID) ){
+                        bookReturn.add(bookID);
+                    }
+                }
+
+                //Return any invalid books trying to be returned
+                if( bookReturn.size() > 0 ){
+                    return INVALID_BOOK + bookReturn.toString();
+                }
+
+                //Use a stack to track which books need to be checked out
+                Stack<CheckOut> checkIns = new Stack<>();
+                ArrayList<CheckOut> visitorBooks = this.checkedOutBooks.get(visitorID);
+
+                //Grab each book to be checked in
+                for( CheckOut toReturn : visitorBooks ){
+
+                    if( checkIns.size() == bookIDs.size() ){
+                        break;
+                    }
+
+                    if(bookIDs.contains(toReturn.getBook())){
+                        checkIns.push(toReturn);
+                    }
+                }
+
+                //Ensure that the number of books being checked in matches the number of books from the books being checked out
+                //owned by the visitor
+                if(checkIns.size() != bookIDs.size() ){
+                    while ( !checkIns.empty() ){
+                        CheckOut checkOut = checkIns.pop();
+                        if( !visitorBooks.contains( checkOut ) )  {
+                            bookReturn.add(checkOut.getBook());
+                        }
+                    }
+                    return NOT_OWN_BOOK + bookReturn.toString();
+                }
+                else {
+                    //For each check-in remove it form the visitors list of checked out books
+                    while ( !checkIns.empty() ){
+                        CheckOut toRemove = checkIns.pop();
+                        toRemove.checkIn();
+                        this.books.get(toRemove.getBook()).checkIn();
+                        visitorBooks.remove(toRemove);
+                    }
+
+                    //If the visitor still has books out, put them back in the hash
+                    if( visitorBooks.size() > 0){
+                        this.checkedOutBooks.put(visitorID, visitorBooks);
+                    }
+
+                    return SUCCESS;
+                }
+            }else{
+                return NO_CHECKOUTS;
+            }
+        }
+        return INVALID_VISITOR;
     }
 
     @Override

@@ -23,36 +23,24 @@ public class CheckOut {
     public double checkIn(){
 
         double fine = 0.00;
-        Calendar currentTime = Calendar.getInstance();
-
-        if( currentTime.after(this.dueDate)){
-
-            fine += ONE_DAY_LATE;
-            dueDate.add(Calendar.WEEK_OF_MONTH, 1);
-
-            while (currentTime.after(dueDate)){
-
-                fine += EACH_WEEK;
-                dueDate.add(Calendar.WEEK_OF_MONTH, 1);
-
-                if( fine > MAX_FINE){
-                    fine = MAX_FINE;
-                    break;
-                }
-            }
-        }
+        this.book.checkIn();
+        this.book = null;
+        this.visitor = null;
         return fine;
     }
 
-    public Book getBook() {
-        return book;
+    public String getBook() {
+        return book.getISBN();
     }
 
     public Visitor getVisitor() {
         return visitor;
     }
 
-    public Calendar getDueDate() {
-        return dueDate;
+    public boolean isOverDue() {
+        if( Calendar.getInstance().after(dueDate) ){
+            return true;
+        }
+        return false;
     }
 }
