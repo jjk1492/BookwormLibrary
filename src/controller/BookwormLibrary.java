@@ -2,8 +2,12 @@ package controller;
 
 import model.Book;
 import model.CheckOut;
+import model.Visit;
 import model.Visitor;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -36,6 +40,8 @@ public class BookwormLibrary {
     private HashMap<String, Visitor> visitors;
 
     private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
+
+    private ArrayList<Visit> currentVisits;
 
     /**
      * Lazy constructor
@@ -135,6 +141,32 @@ public class BookwormLibrary {
             return SUCCESS;
         }
         return INVALID_VISITOR;
+    }
+
+    public void shutdown(){
+        for (int i = 0; i < currentVisits.size(); i++) {
+            Visit v = currentVisits.get(i);
+            v.endVisit(Calendar.getInstance().getTimeInMillis());
+        }
+        try (PrintWriter writer = new PrintWriter("data.txt", "UTF-8")) {
+            writer.println("VISITORS: \n");
+            for (Visitor vis : visitors.values()) {
+                writer.println(vis.toString());
+            }
+            for (Book b : books.values()) {
+                writer.println(b.toString());
+            }
+            writer.println("Checked out books: \n");
+            for (ArrayList<CheckOut> checkedOut : checkedOutBooks.values()) {
+                for (CheckOut ch : checkedOut) {
+                    writer.println(ch.getBook() + "checked out to: " + ch.getVisitor());
+                }
+            }
+        } catch (FileNotFoundException e) {
+                e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+        }
     }
 
     /**

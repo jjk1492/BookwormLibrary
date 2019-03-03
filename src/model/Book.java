@@ -62,4 +62,9 @@ public class Book{
         }
     }
 
+    @Override
+    public String toString() {
+        return this.getISBN() + " " + this.title + " " + this.authors + " " + this.publisher + " " + this.publishDate +
+                " " + this.numberOfCopies + " " + this.numberOfCheckedOut;
+    }
 }

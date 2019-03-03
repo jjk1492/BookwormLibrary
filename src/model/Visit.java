@@ -27,4 +27,8 @@ public class Visit {
         this.date = date;
         this.visitor = visitor;
     }
+
+    public void endVisit(long endTime){
+        this.endTime = endTime;
+    }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -54,6 +55,12 @@ public class Visitor {
                 lastName.equals(visitor.lastName) &&
                 address.equals(visitor.address) &&
                 phoneNumber.equals(visitor.phoneNumber);
+    }
+
+    public String toString(){
+        String str = this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber +
+                " " + this.userID;
+        return str;
     }
 
     /**
