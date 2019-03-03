@@ -8,7 +8,7 @@ import java.util.Queue;
  * A visitor of Bookworm Library. Visitors are identified by their unique 10-digit UserID. Visitors are considered
  * the same if they have the same first name, last name, address, and phone number.
  *
- * @author John Knecht V (jjk1492@rit.edu)
+ * @author John Knecht V (jjk1492@rit.edu) & Lucas Golden
  */
 public class Visitor {
 

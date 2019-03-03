@@ -14,7 +14,7 @@ import java.util.*;
  * Represents the Bookworm Library. Holds all the books, visitors, and visits to the library.
  * Utilizes the Singleton design pattern
  *
- * @author John Knecht V (jjk1492@rit.edu)
+ * @author John Knecht V (jjk1492@rit.edu) & Lucas Golden
  */
 public class BookwormLibrary {
 
@@ -63,6 +63,14 @@ public class BookwormLibrary {
         this.books = books;
         this.visitors = visitors;
         this.checkedOutBooks = checkOuts;
+    }
+
+    public BookwormLibrary(HashMap<String, Book> books, HashMap<String, Visitor> visitors, HashMap<String, ArrayList<CheckOut>> checkOuts,
+                           ArrayList<Visit> v){
+        this.books = books;
+        this.visitors = visitors;
+        this.checkedOutBooks = checkOuts;
+        this.currentVisits = v;
     }
 
 
@@ -143,19 +151,28 @@ public class BookwormLibrary {
         return INVALID_VISITOR;
     }
 
+    /**
+     * Shuts down the system, storing all data in a txt file
+     */
     public void shutdown(){
         for (int i = 0; i < currentVisits.size(); i++) {
             Visit v = currentVisits.get(i);
             v.endVisit(Calendar.getInstance().getTimeInMillis());
+        }
+        for (int j = 0; j < currentVisits.size(); j++) {
+            currentVisits.remove(j);
         }
         try (PrintWriter writer = new PrintWriter("data.txt", "UTF-8")) {
             writer.println("VISITORS: \n");
             for (Visitor vis : visitors.values()) {
                 writer.println(vis.toString());
             }
+            writer.println();
+            writer.println("Books: \n");
             for (Book b : books.values()) {
                 writer.println(b.toString());
             }
+            writer.println();
             writer.println("Checked out books: \n");
             for (ArrayList<CheckOut> checkedOut : checkedOutBooks.values()) {
                 for (CheckOut ch : checkedOut) {
