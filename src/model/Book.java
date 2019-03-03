@@ -12,14 +12,17 @@ import java.util.Date;
 public class Book{
 
     //Required book data
-    private String ISBN;
     private String title;
-    private ArrayList<String> authors;
+    private String ISBN;
     private String publisher;
-    private String publishDate;
-    private int numberOfCopies;
-    private int numberOfCheckedOut;
+    private ArrayList<String> authors;
 
+    private Date publishDate;
+
+    private int pageCount;
+
+    private int numberOfCopies = 0;
+    private int numberOfCheckedOut = 0;
 
     /**
      *
@@ -28,18 +31,22 @@ public class Book{
      * @param authors - The author(s) of this book
      * @param publisher - The publisher of this book
      * @param publishDate - The publish date of this book
-     * @param numberOfCopies - Number of copies owned by controller.BookwormLibrary
-     * @param numberOfCheckedOut - Number of copies currently checked out
      */
-    public Book(String isbn, String title, ArrayList<String> authors, String publisher, String publishDate, int numberOfCopies, int numberOfCheckedOut) {
+    public Book(String isbn, String title, ArrayList<String> authors, String publisher, Date publishDate, int pageCount) {
         this.ISBN = isbn;
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;
         this.publishDate = publishDate;
-        this.numberOfCopies = numberOfCopies;
-        this.numberOfCheckedOut = numberOfCheckedOut;
+        this.pageCount = pageCount;
+    }
 
+    /**
+     * Get this books Title
+     * @return String of the Title
+     */
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -50,12 +57,66 @@ public class Book{
         return this.ISBN;
     }
 
+    /**
+     * Get this books Publisher
+     * @return String name of the Publisher
+     */
+    public String getPublisher() {
+        return publisher;
+    }
+
+    /**
+     * Get this books list of authors
+     * @return ArrayList of autors
+     */
+    public ArrayList<String> getAuthors() {
+        return authors;
+    }
+
+    /**
+     * Get this books published date
+     * @return String representation of published date
+     */
+    public String getPublishDate() {
+        return publishDate.toString();
+    }
+
+    /**
+     * Get this books number of pages
+     * @return Int number of pages
+     */
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    /**
+     * Get this books number of copies
+     * @return Int number of copies
+     */
+    public int getNumberOfCopies() {
+        return numberOfCopies;
+    }
+
+    /**
+     * Get this books number of checked out copies
+     * @return Int number of checked out copies
+     */
+    public int getNumberOfCheckedOut() {
+        return numberOfCheckedOut;
+    }
+
+    /**
+     * Increment the number of this book that are checked out
+     */
     public void checkOut(){
         if( numberOfCheckedOut < numberOfCopies){
             this.numberOfCheckedOut++;
         }
     }
 
+    /**
+     * Decrement the number of this book that are checked out
+     */
     public void checkIn(){
         if( numberOfCheckedOut > 0){
             this.numberOfCheckedOut--;
