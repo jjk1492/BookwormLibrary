@@ -155,30 +155,37 @@ public class BookwormLibrary {
      * Shuts down the system, storing all data in a txt file
      */
     public void shutdown(){
+        //end visits
         for (int i = 0; i < currentVisits.size(); i++) {
             Visit v = currentVisits.get(i);
             v.endVisit(Calendar.getInstance().getTimeInMillis());
         }
+        //remove visits from arraylist
         for (int j = 0; j < currentVisits.size(); j++) {
             currentVisits.remove(j);
         }
+        //creates the writer for the text file
         try (PrintWriter writer = new PrintWriter("data.txt", "UTF-8")) {
             writer.println("VISITORS: \n");
+            //visitors
             for (Visitor vis : visitors.values()) {
                 writer.println(vis.toString());
             }
             writer.println();
             writer.println("Books: \n");
+            //books
             for (Book b : books.values()) {
                 writer.println(b.toString());
             }
             writer.println();
             writer.println("Checked out books: \n");
+            //checked out books
             for (ArrayList<CheckOut> checkedOut : checkedOutBooks.values()) {
                 for (CheckOut ch : checkedOut) {
                     writer.println(ch.getBook() + "checked out to: " + ch.getVisitor());
                 }
             }
+            //catches
         } catch (FileNotFoundException e) {
                 e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
