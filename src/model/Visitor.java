@@ -15,16 +15,19 @@ public class Visitor {
     private String lastName;
     private String address;
     private String phoneNumber;
-    private String userID;
+
+    private long userID;
+
+    private double fine = 0.0;
     /**
      * Constructor for a visitor, contains name, contact info, and an ID number.
-     * @param firstName
-     * @param lastName
-     * @param address
-     * @param phoneNumber
-     * @param userID
+     * @param firstName First name of Visitor
+     * @param lastName Last name of Visitor
+     * @param address Address of Visitor
+     * @param phoneNumber Visitor's phone number
+     * @param userID Unique 10 digit ID
      */
-    public Visitor(String firstName, String lastName, String address, String phoneNumber, String userID) {
+    public Visitor(String firstName, String lastName, String address, String phoneNumber, long userID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -36,7 +39,7 @@ public class Visitor {
      * Get this Visitor's ID.
      * @return - The userID String.
      */
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 
