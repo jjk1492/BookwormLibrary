@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -7,7 +8,7 @@ import java.util.Queue;
  * A visitor of Bookworm Library. Visitors are identified by their unique 10-digit UserID. Visitors are considered
  * the same if they have the same first name, last name, address, and phone number.
  *
- * @author John Knecht V (jjk1492@rit.edu)
+ * @author John Knecht V (jjk1492@rit.edu) & Lucas Golden
  */
 public class Visitor {
 
@@ -68,6 +69,13 @@ public class Visitor {
                 lastName.equals(visitor.lastName) &&
                 address.equals(visitor.address) &&
                 phoneNumber.equals(visitor.phoneNumber);
+    }
+
+    @Override
+    public String toString(){
+        String str = this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber +
+                " " + this.userID;
+        return str;
     }
 
     /**

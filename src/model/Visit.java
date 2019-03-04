@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Represents a visit, one is created each time a visitor enters the library. Tracks the time of the visit, the date, and who visited.
  *
- * @author John Knecht V(jjk1492@rit.edu)
+ * @author John Knecht V(jjk1492@rit.edu) & Lucas Golden
  */
 public class Visit {
 
@@ -61,5 +61,13 @@ public class Visit {
         if (endTime == 0L) return (int)((System.currentTimeMillis() - startTime) / 1000) / 60;
 
         return (int)((endTime - startTime) / 1000) / 60;
+    }
+
+    /**
+     * Provides the necessary endtime to end a visit
+     * @param endTime the time the visit ends
+     */
+    public void endVisit(long endTime){
+        this.endTime = endTime;
     }
 }

@@ -3,6 +3,7 @@ package Controller;
 import controller.BookwormLibrary;
 import model.Book;
 import model.CheckOut;
+import model.Visit;
 import model.Visitor;
 import org.junit.Test;
 
@@ -13,12 +14,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * J-Unit tests for the BookwormLibrary class.
  *
- * @author John Knecht V (jjk1492@rit.edu)
+ * @author John Knecht V (jjk1492@rit.edu) & Lucas Golden
  */
 @Tag("controller-tier")
 public class BookwormLibraryTest {
@@ -88,6 +91,29 @@ public class BookwormLibraryTest {
 
         expectedBooks.put("9780553213119", book);
 
+    }
 
+    @Test
+    public void testSafeShutDown(){
+        //setting up environment
+        HashMap<String, Visitor> expectedVisitors = new HashMap<>();
+        Visitor CeeMoore = new Visitor("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
+        Visitor BeeMoore = new Visitor("BeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
+        ArrayList<Visit> v = new ArrayList<>();
+        v.add(new Visit( CeeMoore));
+        v.add(new Visit(BeeMoore));
+        HashMap<String, Visitor> visitors = new HashMap<>();
+        visitors.put("CeeMoore", CeeMoore);
+        visitors.put("BeeMoore", BeeMoore);
+        HashMap<String, Book> books = new HashMap<>();
+        ArrayList<String> expectedAuthors = new ArrayList<>();
+        Book book = new Book("9780553213119","Moby Dick", expectedAuthors,
+                "Richard Bentley", Calendar.getInstance().getTime(),3);
+        books.put("Moby Dick", book);
+        HashMap<String, ArrayList<CheckOut>> checkOuts = new HashMap<>();
+        BookwormLibrary cut = new BookwormLibrary(books, visitors, checkOuts, v);
+        cut.shutdown(); //execute shutdown
+        //make sure removed all visits
+        assertTrue(v.size() == 0);
     }
 }
