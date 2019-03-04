@@ -76,7 +76,7 @@ public class BookwormLibrary {
      * @param phoneNumber - Visitor's phone number
      * @return True if the the user can register, false otherwise
      */
-    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
+    private boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
         Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, "TestUser");
         return !this.visitors.containsValue(temp);
     }
