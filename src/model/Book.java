@@ -123,4 +123,12 @@ public class Book{
         }
     }
 
+    public void addCopies(int amount){
+        this.numberOfCopies += amount;
+    }
+
+    @Override
+    public String toString() {
+        return ISBN + "," + title + "," + String.join(",", authors) + "," + publishDate + "," + numberOfCopies;
+    }
 }
