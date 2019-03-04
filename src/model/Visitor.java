@@ -15,8 +15,7 @@ public class Visitor {
     private String lastName;
     private String address;
     private String phoneNumber;
-
-    private long userID;
+    private String userID;
 
     private double fine = 0.0;
     /**
@@ -27,7 +26,7 @@ public class Visitor {
      * @param phoneNumber Visitor's phone number
      * @param userID Unique 10 digit ID
      */
-    public Visitor(String firstName, String lastName, String address, String phoneNumber, long userID) {
+    public Visitor(String firstName, String lastName, String address, String phoneNumber, String userID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -39,7 +38,7 @@ public class Visitor {
      * Get this Visitor's ID.
      * @return - The userID String.
      */
-    public long getUserID() {
+    public String getUserID() {
         return userID;
     }
 
