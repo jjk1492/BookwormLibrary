@@ -2,6 +2,7 @@ package controller;
 
 import model.Book;
 import model.CheckOut;
+import model.Visit;
 import model.Visitor;
 
 import java.io.File;
@@ -40,6 +41,8 @@ public class BookwormLibrary {
     //HashMap key is the visitors uniqueID
     private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
 
+    private ArrayList<Visit> currentVisits;
+
     /**
      * Lazy constructor
      *
@@ -74,7 +77,7 @@ public class BookwormLibrary {
     public HashMap<String, Visitor> getVisitors() {
         return visitors;
     }
-
+  
     public ArrayList<Book> getCatalogue() {
         return catalogue;
     }
@@ -85,6 +88,14 @@ public class BookwormLibrary {
 
     public HashMap<String, ArrayList<CheckOut>> getCheckedOutBooks() {
         return checkedOutBooks;
+    }
+  
+    public ArrayList<Visit> getCurrentVisits() {
+        return currentVisits;
+    }
+
+    public void addToVisits(Visit v){
+        currentVisits.add(v);
     }
 
     private ArrayList<Book> readInBooks() {
