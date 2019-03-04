@@ -18,7 +18,6 @@ public class BookwormLibrary {
     private static BookwormLibrary INSTANCE = new BookwormLibrary();
 
     private final static int MAX_NUM_CHECKOUTS = 5;
-    private final static double NO_FINE = 0.00;
 
     //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
     //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
@@ -30,12 +29,16 @@ public class BookwormLibrary {
     private final static String INVALID_BOOK = "Error:invalid-book-id:";
     private final static String MAX_CHECKOUTS_EXCEEDED = "Error:max-checkout-exceeded";
 
+    //Arraylist of purchasable books
+    private ArrayList<Book> catalogue = new ArrayList<>();
+
     //HashMap key is the ISBN of the book
     private HashMap<String, Book> books;
 
     //HashMap key is the visitors uniqueID
     private HashMap<String, Visitor> visitors;
 
+    //HashMap key is the visitors uniqueID
     private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
 
     /**
@@ -89,15 +92,19 @@ public class BookwormLibrary {
      * @param address - Visitor's address
      * @param phoneNumber - Visitor's phone number
      */
-    public String registerUser(String firstName, String lastName, String address, String phoneNumber){
-        if( verifyUser(firstName, lastName, address, phoneNumber)){
+    public String registerUser(String firstName, String lastName, String address, String phoneNumber) {
+        if (verifyUser(firstName, lastName, address, phoneNumber)) {
             String userID = Long.toString(new Random().nextLong());
             Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
             visitors.put(userID, newVisitor);
             return "register," + userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";";
-        }else {
+        } else {
             return "register,duplicate;";
         }
+    }
+
+    public void addBookToCatalogue(Book book) {
+        this.catalogue.add(book);
     }
 
     /**
