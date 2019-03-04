@@ -42,14 +42,26 @@ public class Visitor {
         return userID;
     }
 
-    public void payFine(double amount){
+    /**
+     * Pay user fine in amount
+     * @param amount amount to pay
+     */
+    public void payFine(double amount) {
         fine -= amount;
     }
 
-    public double getFine(){
+    /**
+     * Get how much the user owes to the library
+     * @return fine amount
+     */
+    public double getFine() {
         return fine;
     }
 
+    /**
+     * Add fine amount to user
+     * @param amount fine amount
+     */
     public void addFine(double amount) {
         this.fine += amount;
     }

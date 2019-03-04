@@ -2,7 +2,6 @@ package model;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -10,13 +9,13 @@ import java.util.Date;
  *
  * @author John Knecht V (jjk1492@rit.edu)
  */
-public class Book{
+public class Book {
 
     //Required book data
     private String title;
     private String ISBN;
     private String publisher;
-    private ArrayList<String> authors;
+    private ArrayList < String > authors;
 
     private Date publishDate;
 
@@ -33,7 +32,7 @@ public class Book{
      * @param publisher - The publisher of this book
      * @param publishDate - The publish date of this book
      */
-    public Book(String isbn, String title, ArrayList<String> authors, String publisher, Date publishDate, int pageCount) {
+    public Book(String isbn, String title, ArrayList < String > authors, String publisher, Date publishDate, int pageCount) {
         this.ISBN = isbn;
         this.title = title;
         this.authors = authors;
@@ -54,7 +53,7 @@ public class Book{
      * Get this books unique ISBN
      * @return String of the ISBN
      */
-    public String getISBN(){
+    public String getISBN() {
         return this.ISBN;
     }
 
@@ -70,7 +69,7 @@ public class Book{
      * Get this books list of authors
      * @return ArrayList of autors
      */
-    public ArrayList<String> getAuthors() {
+    public ArrayList < String > getAuthors() {
         return authors;
     }
 
@@ -109,8 +108,8 @@ public class Book{
     /**
      * Increment the number of this book that are checked out
      */
-    public void checkOut(){
-        if( numberOfCheckedOut < numberOfCopies){
+    public void checkOut() {
+        if (numberOfCheckedOut < numberOfCopies) {
             this.numberOfCheckedOut++;
         }
     }
@@ -118,18 +117,17 @@ public class Book{
     /**
      * Decrement the number of this book that are checked out
      */
-    public void checkIn(){
-        if( numberOfCheckedOut > 0){
+    public void checkIn() {
+        if (numberOfCheckedOut > 0) {
             this.numberOfCheckedOut--;
         }
     }
 
-    public void addCopies(int amount){
+    /**
+     * Add to the number of copies that the library has of this book
+     * @param amount number of copies
+     */
+    public void addCopies(int amount) {
         this.numberOfCopies += amount;
-    }
-
-    @Override
-    public String toString() {
-        return ISBN + "," + title + "," + String.join(",", authors) + "," + new SimpleDateFormat("yyyy-MM-dd").format(this.publishDate) + "," + numberOfCopies;
     }
 }

@@ -1,31 +1,32 @@
 package commands;
 
-import model.Book;
 import model.CheckOut;
 
-import java.util.ArrayList;
-
-public class findBorrowBook extends command{
+public class findBorrowBook extends command {
     @Override
     public String runCommand(String[] args) {
-        if(library.getCheckedOutBooks().containsKey(args[1])){
-            int id = 0;
-            StringBuilder sb = new StringBuilder();
-            sb.append(library.getCheckedOutBooks().get(args[1]).size());
-            sb.append(",\n");
+        if (args.length == 2) {
+            if (library.getCheckedOutBooks().containsKey(args[1])) {
+                int id = 0;
+                StringBuilder sb = new StringBuilder();
+                sb.append(library.getCheckedOutBooks().get(args[1]).size());
 
-            for(CheckOut c : library.getCheckedOutBooks().get(args[1])){
-                sb.append(id);
-                id++;
-                sb.append(",");
-                sb.append(c.getBookISBN());
-                sb.append(",");
-                sb.append(c.getBook().getTitle());
-                sb.append(",");
-                sb.append(c.getCheckedDate());
+                for (CheckOut c: library.getCheckedOutBooks().get(args[1])) {
+                    sb.append(",\n");
+                    sb.append(++id);
+                    sb.append(",");
+                    sb.append(c.getBook().getISBN());
+                    sb.append(",");
+                    sb.append(c.getBook().getTitle());
+                    sb.append(",");
+                    sb.append(c.getCheckedDate());
+                }
+
+                return "borrow," + sb.toString() + ";";
             }
-            sb.append(";");
+            return "borrow,invalid-visitor-id;";
+        } else {
+            return "borrowed,missing-parameters,{visitor ID};";
         }
-        return "borrow,invalid-visitor-id;";
     }
 }

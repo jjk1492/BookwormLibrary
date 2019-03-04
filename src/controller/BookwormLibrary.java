@@ -19,39 +19,31 @@ public class BookwormLibrary {
 
     private static BookwormLibrary INSTANCE = new BookwormLibrary();
 
-    private final static int MAX_NUM_CHECKOUTS = 5;
-
-    //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
-    //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
-    private final static String OVERDUE = "overdue";
-    private final static String SUCCESS = "success";
-    private final static String INVALID_VISITOR = "invalid-visitor-id";
-    private final static String INVALID_BOOK = "invalid-book-id,";
-    private final static String MAX_CHECKOUTS_EXCEEDED = "max-checkout-exceeded";
-
-    //Arraylist of purchasable books
-    private ArrayList<Book> catalogue = this.readInBooks();
+    //ArrayList of purchasable books
+    private ArrayList < Book > catalogue = this.readInBooks();
 
     //HashMap key is the ISBN of the book
-    private HashMap<String, Book> books;
+    private HashMap < String, Book > books;
 
     //HashMap key is the visitors uniqueID
-    private HashMap<String, Visitor> visitors;
+    private HashMap < String, Visitor > visitors;
 
     //HashMap key is the visitors uniqueID
-    private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
+    private HashMap < String, ArrayList < CheckOut >> checkedOutBooks;
 
-    private ArrayList<Visit> currentVisits;
+    //ArrayList of current visitors in Lirary
+    private ArrayList < Visit > currentVisits;
 
     /**
      * Lazy constructor
      *
      * Create HashMaps for books and visitors
      */
-    private BookwormLibrary(){
-        this.books = new HashMap<>();
-        this.visitors = new HashMap<>();
-        this.checkedOutBooks = new HashMap<>();
+    private BookwormLibrary() {
+        this.books = new HashMap < > ();
+        this.visitors = new HashMap < > ();
+        this.checkedOutBooks = new HashMap < > ();
+        this.currentVisits = new ArrayList < > ();
     }
 
     /**
@@ -59,10 +51,11 @@ public class BookwormLibrary {
      * @param books - HashMap for the books
      * @param visitors - HashMap for the visitors
      */
-    public BookwormLibrary(HashMap<String, Book> books, HashMap<String, Visitor> visitors, HashMap<String, ArrayList<CheckOut>> checkOuts){
+    public BookwormLibrary(HashMap < String, Book > books, HashMap < String, Visitor > visitors, HashMap < String, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
         this.books = books;
         this.visitors = visitors;
-        this.checkedOutBooks = checkOuts;
+        this.checkedOutBooks = checkedOutBooks;
+        this.currentVisits = currentVisits;
     }
 
 
@@ -70,57 +63,100 @@ public class BookwormLibrary {
      * Retrieve the one and only instance of the controller.BookwormLibrary.
      * @return The instance of the controller.BookwormLibrary
      */
-    public static BookwormLibrary getInstance(){
+    public static BookwormLibrary getInstance() {
         return INSTANCE;
     }
 
-    public HashMap<String, Visitor> getVisitors() {
+    /**
+     * Get all of the visitors that have visited the library
+     * @return Hasmap<VisitorId, Visitor>
+     */
+    public HashMap < String, Visitor > getVisitors() {
         return visitors;
     }
-  
-    public ArrayList<Book> getCatalogue() {
+
+    /**
+     * Get the books that can be purchased from the catalogue
+     * @return ArrayList<BooK> of all the books that can be purchased
+     */
+    public ArrayList < Book > getCatalogue() {
         return catalogue;
     }
 
-    public HashMap<String, Book> getBooks() {
+    /**
+     * Get all the books the library currently owns
+     * @return ArrayList<Book> of all the books the library owns
+     */
+    public HashMap < String, Book > getBooks() {
         return books;
     }
 
-    public HashMap<String, ArrayList<CheckOut>> getCheckedOutBooks() {
+    /**
+     * Get the books each member has checked out
+     * @return HashMap<VisitorID, ArrayList<Checkout>> of all checked out books
+     */
+    public HashMap < String, ArrayList < CheckOut >> getCheckedOutBooks() {
         return checkedOutBooks;
     }
-  
-    public ArrayList<Visit> getCurrentVisits() {
-        return currentVisits;
+
+    /**
+     * Add a visitor to currently visiting
+     * @param visitorID Visitor
+     * @return string of error or success
+     */
+    public String addToVisits(String visitorID) {
+        Visitor v = this.visitors.get(visitorID);
+        if (v == null) {
+            return "invalid-id";
+        }
+        for (Visit vis: this.currentVisits) {
+            if (visitorID.equals(vis.getVisitorId())) {
+                return "arrive,duplicate";
+            }
+        }
+        Visit visit = new Visit(v);
+        this.currentVisits.add(visit);
+        return "arrive," + visitorID + "," + visit.getStartDate() + "," + visit.getStartTime();
     }
 
-    public void addToVisits(Visit v){
-        currentVisits.add(v);
+    /**
+     * Remove a user from currently visiting
+     * @param visitorID Visitor
+     * @return string of error or success
+     */
+    public String removeFromVisits(String visitorID) {
+        for (Visit vis: this.currentVisits) {
+            if (visitorID.equals(vis.getVisitorId())) {
+                vis.endVisit();
+                this.currentVisits.remove(vis);
+                return "depart," + vis.getVisitorId() + "," + vis.getEndTime() + "," + vis.getVisitTimeMinutes();
+            }
+        }
+        return "invalid-id";
     }
 
-    public void removeFromVisits(Visit v){
-        currentVisits.remove(v);
-    }
-
-    private ArrayList<Book> readInBooks() {
-        ArrayList<Book> books = new ArrayList<>();
+    /**
+     * Read in books from catalogue
+     * Only used in initializing the books field
+     * @return ArrayList<Book> of all books in the catalogue
+     */
+    private ArrayList < Book > readInBooks() {
+        ArrayList < Book > books = new ArrayList < > ();
         try {
             Scanner scanner = new Scanner(new File("./src/books.txt"));
 
-            while(scanner.hasNextLine()) {
-                ArrayList<String> vals = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                ArrayList < String > vals = new ArrayList < > ();
                 StringBuilder builder = new StringBuilder();
 
                 boolean inSpecial = false;
-                for (char c : scanner.nextLine().toCharArray()) {
+                for (char c: scanner.nextLine().toCharArray()) {
                     if (c == '"' || c == '{' || c == '}') {
                         inSpecial = !inSpecial;
-                    }
-                    else if (c == ',' && !inSpecial) {
+                    } else if (c == ',' && !inSpecial) {
                         vals.add(builder.toString());
                         builder = new StringBuilder();
-                    }
-                    else {
+                    } else {
                         builder.append(c);
                     }
                 }
@@ -129,12 +165,11 @@ public class BookwormLibrary {
 
                 if (vals.get(4).length() == 4) {
                     vals.set(4, vals.get(4) + "-01-01");
-                }
-                else if (vals.get(4).length() == 7) {
+                } else if (vals.get(4).length() == 7) {
                     vals.set(4, vals.get(4) + "-01");
                 }
 
-                books.add(new Book(vals.get(0), vals.get(1), new ArrayList<>(Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
+                books.add(new Book(vals.get(0), vals.get(1), new ArrayList < > (Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,7 +186,7 @@ public class BookwormLibrary {
      * @param phoneNumber - Visitor's phone number
      * @return True if the the user can register, false otherwise
      */
-    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
+    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber) {
         Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, "TestUser");
         return !this.visitors.containsValue(temp);
     }
@@ -168,9 +203,9 @@ public class BookwormLibrary {
             String userID = Long.toString(new Random().nextLong());
             Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
             visitors.put(userID, newVisitor);
-            return "register," + userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";";
+            return userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         } else {
-            return "register,duplicate;";
+            return "duplicate";
         }
     }
 
@@ -180,31 +215,31 @@ public class BookwormLibrary {
      * @param bookIDs - Book being checked out
      * @return boolean if the checkout was successful
      */
-    public String checkOut(String visitorID, ArrayList<String> bookIDs){
+    public String checkOut(String visitorID, ArrayList < String > bookIDs) {
 
         //Ensure the requested book and user are in the system
-        if( visitors.containsKey(visitorID) ){
+        if (visitors.containsKey(visitorID)) {
 
-            if( checkedOutBooks.containsKey(visitorID) ){
-                if( checkedOutBooks.get(visitorID).size() + bookIDs.size() > MAX_NUM_CHECKOUTS ){
-                    return MAX_CHECKOUTS_EXCEEDED;
+            if (checkedOutBooks.containsKey(visitorID)) {
+                if (checkedOutBooks.get(visitorID).size() + bookIDs.size() > 5) {
+                    return "max-checkout-exceeded";
                 }
             }
 
             //Ensure requested books are owned by bookworm library
-            ArrayList<String> bookReturn = new ArrayList<>();
-            for( String bookID : bookIDs ){
-               if( !this.books.containsKey(bookID) ){
-                   bookReturn.add(bookID);
-               }
+            ArrayList < String > bookReturn = new ArrayList < > ();
+            for (String bookID: bookIDs) {
+                if (!this.books.containsKey(bookID)) {
+                    bookReturn.add(bookID);
+                }
             }
 
-            if( bookReturn.size() > 0 ){
-                return INVALID_BOOK + "{" + String.join(",", bookReturn) + "}";
+            if (bookReturn.size() > 0) {
+                return "invalid-book-id," + "{" + String.join(",", bookReturn) + "}";
             }
 
-            ArrayList<CheckOut> checkOuts = new ArrayList<>();
-            for( String bookID : bookIDs ){
+            ArrayList < CheckOut > checkOuts = new ArrayList < > ();
+            for (String bookID: bookIDs) {
                 Book toCheckout = this.books.get(bookID);
                 toCheckout.checkOut();
                 checkOuts.add(new CheckOut(toCheckout, visitorID, Calendar.getInstance()));
@@ -213,7 +248,7 @@ public class BookwormLibrary {
             this.checkedOutBooks.put(visitorID, checkOuts);
             return checkOuts.get(0).getDueDate();
         }
-        return INVALID_VISITOR;
+        return "invalid-visitor-id";
     }
 
     /**
@@ -222,11 +257,11 @@ public class BookwormLibrary {
      * @param bookIDs - Array of book ISBNs that are being checked in by the visitor
      * @return - Stringing explaining the error or telling the fee amount.
      */
-    public String checkIn(String visitorID, ArrayList<String> bookIDs){
+    public String checkIn(String visitorID, ArrayList < String > bookIDs) {
 
         if (visitors.containsKey(visitorID)) {
             String invalidIDs = "";
-            for(String isbn: bookIDs) {
+            for (String isbn: bookIDs) {
                 if (!books.containsKey(isbn)) {
                     invalidIDs += (isbn + ",");
                 }
@@ -237,8 +272,8 @@ public class BookwormLibrary {
             }
 
             String overDue = "";
-            for(String isbn: bookIDs) {
-                for(CheckOut co : this.checkedOutBooks.get(visitorID)) {
+            for (String isbn: bookIDs) {
+                for (CheckOut co: this.checkedOutBooks.get(visitorID)) {
                     if (co.isOverDue()) {
                         overDue += (isbn + ",");
                         this.visitors.get(visitorID).addFine(co.getFine());
@@ -252,29 +287,34 @@ public class BookwormLibrary {
             }
 
             if (overDue.length() > 0) {
-                return OVERDUE + ",$" + visitors.get(visitorID).getFine() + overDue.substring(0, overDue.length() - 1);
+                return "overdue,$" + visitors.get(visitorID).getFine() + overDue.substring(0, overDue.length() - 1);
             }
 
-            return SUCCESS;
-        }
-        else {
-            return INVALID_VISITOR;
+            return "success";
+        } else {
+            return "invalid-visitor-id";
         }
     }
 
-    public String buyBook(String isbn, int quantity){
-        if(books.containsKey(isbn)){
+    /**
+     * Purchase a book from the catalogue
+     * @param isbn Book ISBN number
+     * @param quantity number to purchase
+     * @return string of error or success
+     */
+    public String buyBook(String isbn, int quantity) {
+        if (books.containsKey(isbn)) {
             books.get(isbn).addCopies(quantity);
             return books.get(isbn).toString();
-        }else{
-            for(Book b : catalogue){
-                if(b.getISBN().equals(isbn)){
+        } else {
+            for (Book b: catalogue) {
+                if (b.getISBN().equals(isbn)) {
                     try {
                         Book b1 = new Book(b.getISBN(), b.getTitle(), b.getAuthors(), b.getPublisher(), new SimpleDateFormat("yyyy-MM-dd").parse(b.getPublishDate()), b.getPageCount());
                         b1.addCopies(quantity);
                         books.put(isbn, b1);
-                        return b1.toString();
-                    }catch (Exception e){
+                        return b1.getISBN() + "," + b1.getTitle() + "," + String.join(",", b1.getAuthors()) + "," + new SimpleDateFormat("yyyy-MM-dd").format(b1.getPublishDate()) + "," + b1.getNumberOfCopies();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
