@@ -98,6 +98,10 @@ public class BookwormLibrary {
         currentVisits.add(v);
     }
 
+    public void removeFromVisits(Visit v){
+        currentVisits.remove(v);
+    }
+
     private ArrayList<Book> readInBooks() {
         ArrayList<Book> books = new ArrayList<>();
         try {
