@@ -5,7 +5,7 @@ BeeMoore Johnson 123 Nowhere Road 609-609-0609 1
 
 Books: 
 
-9780553213119 Moby Dick [] Richard Bentley 1851 3 1
+9780553213119,Moby Dick,,2019-03-04,0
 
 Checked out books: 
 

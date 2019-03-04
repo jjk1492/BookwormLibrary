@@ -236,7 +236,7 @@ public class BookwormLibrary {
         //end visits
         for (int i = 0; i < currentVisits.size(); i++) {
             Visit v = currentVisits.get(i);
-            v.endVisit(Calendar.getInstance().getTimeInMillis());
+            v.endVisit();
         }
         //remove visits from arraylist
         for (int j = 0; j < currentVisits.size(); j =0) {
@@ -260,7 +260,7 @@ public class BookwormLibrary {
             //checked out books
             for (ArrayList<CheckOut> checkedOut : checkedOutBooks.values()) {
                 for (CheckOut ch : checkedOut) {
-                    writer.println(ch.getBook() + "checked out to: " + ch.getVisitor());
+                    writer.println(ch.getBook() + "checked out to: " + ch.getVisitorId());
                 }
             }
             //catches

@@ -100,15 +100,15 @@ public class BookwormLibraryTest {
         Visitor CeeMoore = new Visitor("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
         Visitor BeeMoore = new Visitor("BeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
         ArrayList<Visit> v = new ArrayList<>();
-        v.add(new Visit(Calendar.getInstance().getTimeInMillis(), "Feb 2nd", CeeMoore));
-        v.add(new Visit(Calendar.getInstance().getTimeInMillis(), "Feb 2nd", BeeMoore));
+        v.add(new Visit( CeeMoore));
+        v.add(new Visit(BeeMoore));
         HashMap<String, Visitor> visitors = new HashMap<>();
         visitors.put("CeeMoore", CeeMoore);
         visitors.put("BeeMoore", BeeMoore);
         HashMap<String, Book> books = new HashMap<>();
         ArrayList<String> expectedAuthors = new ArrayList<>();
         Book book = new Book("9780553213119","Moby Dick", expectedAuthors,
-                "Richard Bentley", "1851",3, 1);
+                "Richard Bentley", Calendar.getInstance().getTime(),3);
         books.put("Moby Dick", book);
         HashMap<String, ArrayList<CheckOut>> checkOuts = new HashMap<>();
         BookwormLibrary cut = new BookwormLibrary(books, visitors, checkOuts, v);
