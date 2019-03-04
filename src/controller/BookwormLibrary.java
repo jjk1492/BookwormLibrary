@@ -26,10 +26,10 @@ public class BookwormLibrary {
     private final static String OVERDUE_BOOK = "Overdue:";
     private final static String SUCCESS = "Success";
     private final static String NOT_OWN_BOOK = "Error:You must return your own book.";
-    private final static String INVALID_VISITOR = "Error:invalid-visitor-id.";
+    private final static String INVALID_VISITOR = "invalid-visitor-id";
     private final static String NO_CHECKOUTS = "Error:Visitor doesn't have any books checked out.";
-    private final static String INVALID_BOOK = "Error:invalid-book-id:";
-    private final static String MAX_CHECKOUTS_EXCEEDED = "Error:max-checkout-exceeded";
+    private final static String INVALID_BOOK = "invalid-book-id,";
+    private final static String MAX_CHECKOUTS_EXCEEDED = "max-checkout-exceeded";
 
     //Arraylist of purchasable books
     private ArrayList<Book> catalogue = this.readInBooks();
@@ -79,7 +79,7 @@ public class BookwormLibrary {
     public HashMap<String, Visitor> getVisitors() {
         return visitors;
     }
-
+    
     public ArrayList<Visit> getCurrentVisits() {
         return currentVisits;
     }
@@ -186,7 +186,7 @@ public class BookwormLibrary {
             }
 
             if( bookReturn.size() > 0 ){
-                return INVALID_BOOK + bookReturn.toString();
+                return INVALID_BOOK + "{" + String.join(",", bookReturn) + "}";
             }
 
             ArrayList<CheckOut> checkOuts = new ArrayList<>();
@@ -197,7 +197,7 @@ public class BookwormLibrary {
             }
 
             this.checkedOutBooks.put(visitorID, checkOuts);
-            return SUCCESS;
+            return checkOuts.get(0).getDueDate();
         }
         return INVALID_VISITOR;
     }

@@ -42,6 +42,14 @@ public class Visitor {
         return userID;
     }
 
+    public void payFine(double amount){
+        fine -= amount;
+    }
+
+    public double getFine(){
+        return fine;
+    }
+
     /**
      *
      * @param o - Object being compared to this Visitor
