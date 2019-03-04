@@ -4,6 +4,7 @@ import model.Book;
 import model.CheckOut;
 import model.Visitor;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -76,7 +77,7 @@ public class BookwormLibrary {
      * @param phoneNumber - Visitor's phone number
      * @return True if the the user can register, false otherwise
      */
-    private boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
+    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber){
         Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, "TestUser");
         return !this.visitors.containsValue(temp);
     }
@@ -88,10 +89,14 @@ public class BookwormLibrary {
      * @param address - Visitor's address
      * @param phoneNumber - Visitor's phone number
      */
-    public void registerUser(String firstName, String lastName, String address, String phoneNumber, String userID){
+    public String registerUser(String firstName, String lastName, String address, String phoneNumber){
         if( verifyUser(firstName, lastName, address, phoneNumber)){
+            String userID = Long.toString(new Random().nextLong());
             Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
             visitors.put(userID, newVisitor);
+            return "register," + userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";";
+        }else {
+            return "register,duplicate;";
         }
     }
 
