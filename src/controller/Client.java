@@ -57,46 +57,7 @@ public class Client {
         }
     }
 
-    private void readInBooks() {
-        try {
-            Scanner scanner = new Scanner(new File("./src/books.txt"));
-
-            while(scanner.hasNextLine()) {
-                ArrayList<String> vals = new ArrayList<>();
-                StringBuilder builder = new StringBuilder();
-
-                boolean inSpecial = false;
-                for (char c : scanner.nextLine().toCharArray()) {
-                    if (c == '"' || c == '{' || c == '}') {
-                        inSpecial = !inSpecial;
-                    }
-                    else if (c == ',' && !inSpecial) {
-                        vals.add(builder.toString());
-                        builder = new StringBuilder();
-                    }
-                    else {
-                        builder.append(c);
-                    }
-                }
-
-                vals.add(builder.toString());
-
-                if (vals.get(4).length() == 4) {
-                    vals.set(4, vals.get(4) + "-01-01");
-                }
-                else if (vals.get(4).length() == 7) {
-                    vals.set(4, vals.get(4) + "-01");
-                }
-
-                this.library.addBookToCatalogue(new Book(vals.get(0), vals.get(1), new ArrayList<>(Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         Client client = new Client();
-        client.readInBooks();
     }
 }

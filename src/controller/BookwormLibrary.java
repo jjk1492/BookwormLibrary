@@ -4,6 +4,7 @@ import model.Book;
 import model.CheckOut;
 import model.Visitor;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class BookwormLibrary {
     private final static String MAX_CHECKOUTS_EXCEEDED = "Error:max-checkout-exceeded";
 
     //Arraylist of purchasable books
-    private ArrayList<Book> catalogue = new ArrayList<>();
+    private ArrayList<Book> catalogue = this.readInBooks();
 
     //HashMap key is the ISBN of the book
     private HashMap<String, Book> books;
@@ -72,6 +73,47 @@ public class BookwormLibrary {
         return INSTANCE;
     }
 
+    private ArrayList<Book> readInBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            Scanner scanner = new Scanner(new File("./src/books.txt"));
+
+            while(scanner.hasNextLine()) {
+                ArrayList<String> vals = new ArrayList<>();
+                StringBuilder builder = new StringBuilder();
+
+                boolean inSpecial = false;
+                for (char c : scanner.nextLine().toCharArray()) {
+                    if (c == '"' || c == '{' || c == '}') {
+                        inSpecial = !inSpecial;
+                    }
+                    else if (c == ',' && !inSpecial) {
+                        vals.add(builder.toString());
+                        builder = new StringBuilder();
+                    }
+                    else {
+                        builder.append(c);
+                    }
+                }
+
+                vals.add(builder.toString());
+
+                if (vals.get(4).length() == 4) {
+                    vals.set(4, vals.get(4) + "-01-01");
+                }
+                else if (vals.get(4).length() == 7) {
+                    vals.set(4, vals.get(4) + "-01");
+                }
+
+                books.add(new Book(vals.get(0), vals.get(1), new ArrayList<>(Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+
     /**
      * Verifies that a new user is not already contained in the system.
      * @param firstName - Visitor's first name
@@ -101,10 +143,6 @@ public class BookwormLibrary {
         } else {
             return "register,duplicate;";
         }
-    }
-
-    public void addBookToCatalogue(Book book) {
-        this.catalogue.add(book);
     }
 
     /**
