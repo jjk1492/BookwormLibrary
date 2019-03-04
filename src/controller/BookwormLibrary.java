@@ -36,7 +36,7 @@ public class BookwormLibrary {
     //HashMap key is the visitors uniqueID
     private HashMap < String, ArrayList < CheckOut >> checkedOutBooks;
 
-    //ArrayList of current visitors in Lirary
+    //ArrayList of current visitors in Library
     private ArrayList < Visit > currentVisits;
 
     /**
@@ -61,14 +61,6 @@ public class BookwormLibrary {
         this.visitors = visitors;
         this.checkedOutBooks = checkedOutBooks;
         this.currentVisits = currentVisits;
-    }
-
-    public BookwormLibrary(HashMap<String, Book> books, HashMap<String, Visitor> visitors, HashMap<String, ArrayList<CheckOut>> checkOuts,
-                           ArrayList<Visit> v){
-        this.books = books;
-        this.visitors = visitors;
-        this.checkedOutBooks = checkOuts;
-        this.currentVisits = v;
     }
 
 
