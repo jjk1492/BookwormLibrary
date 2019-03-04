@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CheckOut {
@@ -18,6 +19,7 @@ public class CheckOut {
         this.book = book;
         this.visitor = visitor;
         this.dueDate = dueDate;
+        dueDate.add(Calendar.DATE, 7);
     }
 
     public double checkIn(){
@@ -38,9 +40,10 @@ public class CheckOut {
     }
 
     public boolean isOverDue() {
-        if( Calendar.getInstance().after(dueDate) ){
-            return true;
-        }
-        return false;
+        return Calendar.getInstance().after(dueDate);
+    }
+
+    public String getDueDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dueDate.getTime());
     }
 }
