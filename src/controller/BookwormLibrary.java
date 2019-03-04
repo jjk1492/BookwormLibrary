@@ -23,11 +23,9 @@ public class BookwormLibrary {
 
     //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
     //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
-    private final static String OVERDUE_BOOK = "Overdue:";
-    private final static String SUCCESS = "Success";
-    private final static String NOT_OWN_BOOK = "Error:You must return your own book.";
+    private final static String OVERDUE = "overdue";
+    private final static String SUCCESS = "success";
     private final static String INVALID_VISITOR = "invalid-visitor-id";
-    private final static String NO_CHECKOUTS = "Error:Visitor doesn't have any books checked out.";
     private final static String INVALID_BOOK = "invalid-book-id,";
     private final static String MAX_CHECKOUTS_EXCEEDED = "max-checkout-exceeded";
 
@@ -79,7 +77,19 @@ public class BookwormLibrary {
     public HashMap<String, Visitor> getVisitors() {
         return visitors;
     }
+  
+    public ArrayList<Book> getCatalogue() {
+        return catalogue;
+    }
 
+    public HashMap<String, Book> getBooks() {
+        return books;
+    }
+
+    public HashMap<String, ArrayList<CheckOut>> getCheckedOutBooks() {
+        return checkedOutBooks;
+    }
+  
     public ArrayList<Visit> getCurrentVisits() {
         return currentVisits;
     }
@@ -193,7 +203,7 @@ public class BookwormLibrary {
             for( String bookID : bookIDs ){
                 Book toCheckout = this.books.get(bookID);
                 toCheckout.checkOut();
-                checkOuts.add(new CheckOut(toCheckout, this.visitors.get(visitorID), Calendar.getInstance()));
+                checkOuts.add(new CheckOut(toCheckout, visitorID, Calendar.getInstance()));
             }
 
             this.checkedOutBooks.put(visitorID, checkOuts);
@@ -210,73 +220,42 @@ public class BookwormLibrary {
      */
     public String checkIn(String visitorID, ArrayList<String> bookIDs){
 
-        //Check that the visitor is part of this library
-        if( visitors.containsKey(visitorID) ){
-
-            //Check the visitor has books checked out
-            if( checkedOutBooks.containsKey(visitorID) ){
-
-                //Check that the books requested to return are books owned by the library
-                ArrayList<String> bookReturn = new ArrayList<>();
-                for( String bookID : bookIDs){
-                    if( !books.containsKey(bookID) ){
-                        bookReturn.add(bookID);
-                    }
+        if (visitors.containsKey(visitorID)) {
+            String invalidIDs = "";
+            for(String isbn: bookIDs) {
+                if (!books.containsKey(isbn)) {
+                    invalidIDs += (isbn + ",");
                 }
-
-                //Return any invalid books trying to be returned
-                if( bookReturn.size() > 0 ){
-                    return INVALID_BOOK + bookReturn.toString();
-                }
-
-                //Use a stack to track which books need to be checked out
-                Stack<CheckOut> checkIns = new Stack<>();
-                ArrayList<CheckOut> visitorBooks = this.checkedOutBooks.get(visitorID);
-
-                //Grab each book to be checked in
-                for( CheckOut toReturn : visitorBooks ){
-
-                    if( checkIns.size() == bookIDs.size() ){
-                        break;
-                    }
-
-                    if(bookIDs.contains(toReturn.getBook())){
-                        checkIns.push(toReturn);
-                    }
-                }
-
-                //Ensure that the number of books being checked in matches the number of books from the books being checked out
-                //owned by the visitor
-                if(checkIns.size() != bookIDs.size() ){
-                    while ( !checkIns.empty() ){
-                        CheckOut checkOut = checkIns.pop();
-                        if( !visitorBooks.contains( checkOut ) )  {
-                            bookReturn.add(checkOut.getBook());
-                        }
-                    }
-                    return NOT_OWN_BOOK + bookReturn.toString();
-                }
-                else {
-                    //For each check-in remove it form the visitors list of checked out books
-                    while ( !checkIns.empty() ){
-                        CheckOut toRemove = checkIns.pop();
-                        toRemove.checkIn();
-                        this.books.get(toRemove.getBook()).checkIn();
-                        visitorBooks.remove(toRemove);
-                    }
-
-                    //If the visitor still has books out, put them back in the hash
-                    if( visitorBooks.size() > 0){
-                        this.checkedOutBooks.put(visitorID, visitorBooks);
-                    }
-
-                    return SUCCESS;
-                }
-            }else{
-                return NO_CHECKOUTS;
             }
+            if (invalidIDs.length() > 0) {
+                invalidIDs = invalidIDs.substring(0, invalidIDs.length() - 1);
+                return "invalid-book-id," + invalidIDs;
+            }
+
+            String overDue = "";
+            for(String isbn: bookIDs) {
+                for(CheckOut co : this.checkedOutBooks.get(visitorID)) {
+                    if (co.isOverDue()) {
+                        overDue += (isbn + ",");
+                        this.visitors.get(visitorID).addFine(co.getFine());
+                    }
+
+                    if (co.getBook().getISBN().equals(isbn)) {
+                        this.checkedOutBooks.get(visitorID).remove(co);
+                        this.books.get(isbn).checkIn();
+                    }
+                }
+            }
+
+            if (overDue.length() > 0) {
+                return OVERDUE + ",$" + visitors.get(visitorID).getFine() + overDue.substring(0, overDue.length() - 1);
+            }
+
+            return SUCCESS;
         }
-        return INVALID_VISITOR;
+        else {
+            return INVALID_VISITOR;
+        }
     }
 
     @Override
