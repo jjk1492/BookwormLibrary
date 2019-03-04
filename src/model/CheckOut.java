@@ -10,33 +10,46 @@ public class CheckOut {
     private static final double EACH_WEEK = 2.00;
     private static final double MAX_FINE = 30.00;
 
-    private Book book;
-    private Visitor visitor;
+    private String isbn;
+    private String visitorId;
     private Calendar dueDate;
 
 
-    public CheckOut(Book book, Visitor visitor, Calendar dueDate) {
-        this.book = book;
-        this.visitor = visitor;
+    public CheckOut(String isbn, String visitorId, Calendar dueDate) {
+        this.isbn = isbn;
+        this.visitorId = visitorId;
         this.dueDate = dueDate;
         dueDate.add(Calendar.DATE, 7);
     }
 
-    public double checkIn(){
+    public double getFine() {
+        if (isOverDue()) {
+            Calendar now = Calendar.getInstance();
 
-        double fine = 0.00;
-        this.book.checkIn();
-        this.book = null;
-        this.visitor = null;
-        return fine;
+            int days = (int)((((now.getTimeInMillis() - dueDate.getTimeInMillis()) / 1000) / 3600) / 24);
+            int weeks = days / 7;
+
+            if (weeks == 0) {
+                return ONE_DAY_LATE;
+            }
+            if (weeks >= 10) {
+                return MAX_FINE;
+            }
+            else {
+                return ONE_DAY_LATE + (weeks * EACH_WEEK);
+            }
+        }
+        else {
+            return 0.0;
+        }
     }
 
-    public String getBook() {
-        return book.getISBN();
+    public String getIsbn() {
+        return isbn;
     }
 
-    public Visitor getVisitor() {
-        return visitor;
+    public String getVisitorId() {
+        return this.visitorId;
     }
 
     public boolean isOverDue() {

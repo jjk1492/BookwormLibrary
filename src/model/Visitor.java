@@ -50,6 +50,10 @@ public class Visitor {
         return fine;
     }
 
+    public void addFine(double amount) {
+        this.fine += amount;
+    }
+
     /**
      *
      * @param o - Object being compared to this Visitor
