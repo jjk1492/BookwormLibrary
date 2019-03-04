@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Search the book Store
+ */
 public class bookStoreSearch extends command {
     @Override
     public String runCommand(String[] args) {

@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Queue;
 
 /**
  * A visitor of Bookworm Library. Visitors are identified by their unique 10-digit UserID. Visitors are considered

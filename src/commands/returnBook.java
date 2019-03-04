@@ -2,6 +2,9 @@ package commands;
 
 import java.util.ArrayList;
 
+/**
+ * Return a book to the library command
+ */
 public class returnBook extends command {
     @Override
     public String runCommand(String[] args) {

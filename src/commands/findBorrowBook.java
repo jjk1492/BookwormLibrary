@@ -2,6 +2,9 @@ package commands;
 
 import model.CheckOut;
 
+/**
+ * Find borrowed books from a user command
+ */
 public class findBorrowBook extends command {
     @Override
     public String runCommand(String[] args) {

@@ -1,5 +1,8 @@
 package commands;
 
+/**
+ * Purchase a book from catalogue command
+ */
 public class bookPurchase extends command {
     @Override
     public String runCommand(String[] args) {

@@ -1,5 +1,8 @@
 package commands;
 
+/**
+ * Register a user to the library command
+ */
 public class registerVisitor extends command {
     @Override
     public String runCommand(String[] args) {

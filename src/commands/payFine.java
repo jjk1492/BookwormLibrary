@@ -2,6 +2,9 @@ package commands;
 
 import model.Visitor;
 
+/**
+ * Pay a user's fine command
+ */
 public class payFine extends command {
     @Override
     public String runCommand(String[] args) {

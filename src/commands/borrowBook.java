@@ -2,6 +2,9 @@ package commands;
 
 import java.util.ArrayList;
 
+/**
+ * Borrow a book command class
+ */
 public class borrowBook extends command {
 
     @Override

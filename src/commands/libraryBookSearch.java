@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Search the library for a book command
+ */
 public class libraryBookSearch extends command {
 
     @Override

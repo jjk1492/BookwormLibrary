@@ -3,6 +3,9 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Checkout object that contains all necessary information about a book checkout
+ */
 public class CheckOut {
 
     //Fine amount constant

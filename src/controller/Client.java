@@ -3,6 +3,10 @@ package controller;
 import commands.*;
 import java.util.Scanner;
 
+/**
+ * Class that interacts with the "server" (library)
+ * Handles parsing of commands
+ */
 public class Client {
 
     public String runCommand(String s) {

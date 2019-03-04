@@ -1,5 +1,8 @@
 package commands;
 
+/**
+ * Begin visit command
+ */
 public class beginVisit extends command {
 
     @Override
