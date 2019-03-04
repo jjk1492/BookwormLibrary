@@ -5,11 +5,9 @@ import java.util.Scanner;
 
 public class Client {
 
-    private BookwormLibrary library = BookwormLibrary.getInstance();
-
     public String runCommand(String s) {
         String s1 = s.replaceAll("\\s", ""); //remove spaces from input
-        String[] args = s1.split(",");          //split the string on commas
+        String[] args = s1.split(","); //split the string on commas
 
         if (!args[args.length - 1].endsWith(";")) {
             return "partial-request;";

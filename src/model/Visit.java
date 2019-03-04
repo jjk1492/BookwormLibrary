@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -24,18 +25,27 @@ public class Visit {
     }
 
     /**
-     * Get the date the visit started
+     * yyyy-MM-dd representation of date the visit started
      * @return Date visit started
      */
-    public Date getStartDate() {
-        return date;
-    }
-    public long getStartTime(){
-        return startTime;
+    public String getStartDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
+    /**
+     * milliseconds representation of when the visit began
+     * @return
+     */
+    public long getStartTime(){
+        return this.startTime;
+    }
+
+    /**
+     * milliseconds representation of when the visit ended
+     * @return
+     */
     public long getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     /**
