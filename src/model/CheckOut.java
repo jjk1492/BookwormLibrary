@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CheckOut {
@@ -10,37 +11,62 @@ public class CheckOut {
     private static final double MAX_FINE = 30.00;
 
     private Book book;
-    private Visitor visitor;
+    private String visitorId;
     private Calendar dueDate;
+    private Calendar checkedDate;
 
 
-    public CheckOut(Book book, Visitor visitor, Calendar dueDate) {
+    public CheckOut(Book book, String visitorId, Calendar dueDate) {
         this.book = book;
-        this.visitor = visitor;
+        this.visitorId = visitorId;
         this.dueDate = dueDate;
+        dueDate.add(Calendar.DATE, 7);
+        this.checkedDate = dueDate;
     }
 
-    public double checkIn(){
+    public double getFine() {
+        if (isOverDue()) {
+            Calendar now = Calendar.getInstance();
 
-        double fine = 0.00;
-        this.book.checkIn();
-        this.book = null;
-        this.visitor = null;
-        return fine;
+            int days = (int)((((now.getTimeInMillis() - dueDate.getTimeInMillis()) / 1000) / 3600) / 24);
+            int weeks = days / 7;
+
+            if (weeks == 0) {
+                return ONE_DAY_LATE;
+            }
+            if (weeks >= 10) {
+                return MAX_FINE;
+            }
+            else {
+                return ONE_DAY_LATE + (weeks * EACH_WEEK);
+            }
+        }
+        else {
+            return 0.0;
+        }
     }
 
-    public String getBook() {
+    public String getBookISBN() {
         return book.getISBN();
     }
 
-    public Visitor getVisitor() {
-        return visitor;
+    public Book getBook() {
+        return book;
+    }
+
+    public String getVisitorId() {
+        return visitorId;
     }
 
     public boolean isOverDue() {
-        if( Calendar.getInstance().after(dueDate) ){
-            return true;
-        }
-        return false;
+        return Calendar.getInstance().after(dueDate);
+    }
+
+    public String getDueDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dueDate.getTime());
+    }
+
+    public String getCheckedDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(checkedDate.getTime());
     }
 }

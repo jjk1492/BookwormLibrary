@@ -68,7 +68,7 @@ public class BookwormLibraryTest {
         //Create a user and add them to the library
         BookwormLibrary cut = new BookwormLibrary(books, visitors, checkOuts);
 
-        cut.registerUser("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609", "1");
+        cut.registerUser("CeeMoore", "Johnson", "123 Nowhere Road", "609-609-0609");
 
         assertEquals(expected, cut);
 

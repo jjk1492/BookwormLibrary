@@ -43,6 +43,18 @@ public class Visitor {
         return userID;
     }
 
+    public void payFine(double amount){
+        fine -= amount;
+    }
+
+    public double getFine(){
+        return fine;
+    }
+
+    public void addFine(double amount) {
+        this.fine += amount;
+    }
+
     /**
      *
      * @param o - Object being compared to this Visitor

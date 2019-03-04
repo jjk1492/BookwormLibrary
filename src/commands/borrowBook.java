@@ -34,8 +34,8 @@ public class borrowBook extends command {
                 }
             }
 
-            return "borrow," + library.checkOut(args[1], ids);
+            return "borrow," + library.checkOut(args[1], ids) + ";";
         }
-        return "borrow,visitor ID,{id};";
+        return "borrow,missing-parameters,{visitorID,{id}};";
     }
 }
