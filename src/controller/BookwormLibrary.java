@@ -73,6 +73,10 @@ public class BookwormLibrary {
         return INSTANCE;
     }
 
+    public HashMap<String, Visitor> getVisitors() {
+        return visitors;
+    }
+
     private ArrayList<Book> readInBooks() {
         ArrayList<Book> books = new ArrayList<>();
         try {
