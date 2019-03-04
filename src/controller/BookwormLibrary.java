@@ -77,6 +77,18 @@ public class BookwormLibrary {
         return visitors;
     }
 
+    public ArrayList<Book> getCatalogue() {
+        return catalogue;
+    }
+
+    public HashMap<String, Book> getBooks() {
+        return books;
+    }
+
+    public HashMap<String, ArrayList<CheckOut>> getCheckedOutBooks() {
+        return checkedOutBooks;
+    }
+
     private ArrayList<Book> readInBooks() {
         ArrayList<Book> books = new ArrayList<>();
         try {
@@ -182,7 +194,7 @@ public class BookwormLibrary {
             for( String bookID : bookIDs ){
                 Book toCheckout = this.books.get(bookID);
                 toCheckout.checkOut();
-                checkOuts.add(new CheckOut(toCheckout.getISBN(), visitorID, Calendar.getInstance()));
+                checkOuts.add(new CheckOut(toCheckout, this.visitors.get(visitorID), Calendar.getInstance()));
             }
 
             this.checkedOutBooks.put(visitorID, checkOuts);
@@ -219,7 +231,7 @@ public class BookwormLibrary {
                         this.visitors.get(visitorID).addFine(co.getFine());
                     }
 
-                    if (co.getIsbn().equals(isbn)) {
+                    if (co.getBook().getISBN().equals(isbn)) {
                         this.checkedOutBooks.get(visitorID).remove(co);
                         this.books.get(isbn).checkIn();
                     }

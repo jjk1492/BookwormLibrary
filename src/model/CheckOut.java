@@ -10,16 +10,18 @@ public class CheckOut {
     private static final double EACH_WEEK = 2.00;
     private static final double MAX_FINE = 30.00;
 
-    private String isbn;
-    private String visitorId;
+    private Book book;
+    private Visitor visitor;
     private Calendar dueDate;
+    private Calendar checkedDate;
 
 
-    public CheckOut(String isbn, String visitorId, Calendar dueDate) {
-        this.isbn = isbn;
-        this.visitorId = visitorId;
+    public CheckOut(Book book, Visitor visitor, Calendar dueDate) {
+        this.book = book;
+        this.visitor = visitor;
         this.dueDate = dueDate;
         dueDate.add(Calendar.DATE, 7);
+        this.checkedDate = dueDate;
     }
 
     public double getFine() {
@@ -44,12 +46,16 @@ public class CheckOut {
         }
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getBookISBN() {
+        return book.getISBN();
     }
 
-    public String getVisitorId() {
-        return this.visitorId;
+    public Book getBook() {
+        return book;
+    }
+
+    public Visitor getVisitor() {
+        return visitor;
     }
 
     public boolean isOverDue() {
@@ -57,6 +63,10 @@ public class CheckOut {
     }
 
     public String getDueDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dueDate.getTime());
+    }
+
+    public String getCheckedDate() {
         return new SimpleDateFormat("yyyy-MM-dd").format(dueDate.getTime());
     }
 }
