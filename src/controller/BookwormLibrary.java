@@ -22,11 +22,9 @@ public class BookwormLibrary {
 
     //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
     //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
-    private final static String OVERDUE_BOOK = "Overdue:";
-    private final static String SUCCESS = "Success";
-    private final static String NOT_OWN_BOOK = "Error:You must return your own book.";
+    private final static String OVERDUE = "overdue";
+    private final static String SUCCESS = "success";
     private final static String INVALID_VISITOR = "invalid-visitor-id";
-    private final static String NO_CHECKOUTS = "Error:Visitor doesn't have any books checked out.";
     private final static String INVALID_BOOK = "invalid-book-id,";
     private final static String MAX_CHECKOUTS_EXCEEDED = "max-checkout-exceeded";
 
@@ -194,7 +192,7 @@ public class BookwormLibrary {
             for( String bookID : bookIDs ){
                 Book toCheckout = this.books.get(bookID);
                 toCheckout.checkOut();
-                checkOuts.add(new CheckOut(toCheckout, this.visitors.get(visitorID), Calendar.getInstance()));
+                checkOuts.add(new CheckOut(toCheckout, visitorID, Calendar.getInstance()));
             }
 
             this.checkedOutBooks.put(visitorID, checkOuts);
@@ -239,7 +237,7 @@ public class BookwormLibrary {
             }
 
             if (overDue.length() > 0) {
-                return "overdue,$" + visitors.get(visitorID).getFine() + overDue.substring(0, overDue.length() - 1);
+                return OVERDUE + ",$" + visitors.get(visitorID).getFine() + overDue.substring(0, overDue.length() - 1);
             }
 
             return SUCCESS;
