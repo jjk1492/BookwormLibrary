@@ -17,8 +17,8 @@ public class bookPurchase extends command {
 
             }
 
-            beginning += n;
-            return beginning + books;
+            beginning += (n + "\n");
+            return beginning + books.substring(0, books.length() - 1);
         }
 
         return "buy,missing-parameters,{quantity,id[,ids]};";

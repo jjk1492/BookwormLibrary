@@ -271,6 +271,7 @@ public class BookwormLibrary {
                 if(b.getISBN().equals(isbn)){
                     try {
                         Book b1 = new Book(b.getISBN(), b.getTitle(), b.getAuthors(), b.getPublisher(), new SimpleDateFormat("yyyy-MM-dd").parse(b.getPublishDate()), b.getPageCount());
+                        b1.addCopies(quantity);
                         books.put(isbn, b1);
                         return b1.toString();
                     }catch (Exception e){

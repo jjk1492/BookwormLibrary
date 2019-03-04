@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,7 +79,7 @@ public class Book{
      * @return String representation of published date
      */
     public String getPublishDate() {
-        return publishDate.toString();
+        return new SimpleDateFormat("yyyy-MM-dd").format(this.publishDate);
     }
 
     /**
@@ -129,6 +130,6 @@ public class Book{
 
     @Override
     public String toString() {
-        return ISBN + "," + title + "," + String.join(",", authors) + "," + publishDate + "," + numberOfCopies;
+        return ISBN + "," + title + "," + String.join(",", authors) + "," + new SimpleDateFormat("yyyy-MM-dd").format(this.publishDate) + "," + numberOfCopies;
     }
 }
