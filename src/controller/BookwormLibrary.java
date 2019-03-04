@@ -5,9 +5,13 @@ import model.CheckOut;
 import model.Visit;
 import model.Visitor;
 
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -21,7 +25,6 @@ public class BookwormLibrary {
     private static BookwormLibrary INSTANCE = new BookwormLibrary();
 
     private final static int MAX_NUM_CHECKOUTS = 5;
-    private final static double NO_FINE = 0.00;
 
     //Book return messages. Format "Result:Message:Data" Result can be Overdue, Success, or Error | Message is the message associated with
     //the result | Data is data needed to be reported by the system.i.e. invalid book IDs
@@ -33,12 +36,16 @@ public class BookwormLibrary {
     private final static String INVALID_BOOK = "Error:invalid-book-id:";
     private final static String MAX_CHECKOUTS_EXCEEDED = "Error:max-checkout-exceeded";
 
+    //Arraylist of purchasable books
+    private ArrayList<Book> catalogue = this.readInBooks();
+
     //HashMap key is the ISBN of the book
     private HashMap<String, Book> books;
 
     //HashMap key is the visitors uniqueID
     private HashMap<String, Visitor> visitors;
 
+    //HashMap key is the visitors uniqueID
     private HashMap<String, ArrayList<CheckOut>> checkedOutBooks;
 
     private ArrayList<Visit> currentVisits;
@@ -82,6 +89,47 @@ public class BookwormLibrary {
         return INSTANCE;
     }
 
+    private ArrayList<Book> readInBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            Scanner scanner = new Scanner(new File("./src/books.txt"));
+
+            while(scanner.hasNextLine()) {
+                ArrayList<String> vals = new ArrayList<>();
+                StringBuilder builder = new StringBuilder();
+
+                boolean inSpecial = false;
+                for (char c : scanner.nextLine().toCharArray()) {
+                    if (c == '"' || c == '{' || c == '}') {
+                        inSpecial = !inSpecial;
+                    }
+                    else if (c == ',' && !inSpecial) {
+                        vals.add(builder.toString());
+                        builder = new StringBuilder();
+                    }
+                    else {
+                        builder.append(c);
+                    }
+                }
+
+                vals.add(builder.toString());
+
+                if (vals.get(4).length() == 4) {
+                    vals.set(4, vals.get(4) + "-01-01");
+                }
+                else if (vals.get(4).length() == 7) {
+                    vals.set(4, vals.get(4) + "-01");
+                }
+
+                books.add(new Book(vals.get(0), vals.get(1), new ArrayList<>(Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+
     /**
      * Verifies that a new user is not already contained in the system.
      * @param firstName - Visitor's first name
@@ -102,10 +150,14 @@ public class BookwormLibrary {
      * @param address - Visitor's address
      * @param phoneNumber - Visitor's phone number
      */
-    public void registerUser(String firstName, String lastName, String address, String phoneNumber, String userID){
-        if( verifyUser(firstName, lastName, address, phoneNumber)){
+    public String registerUser(String firstName, String lastName, String address, String phoneNumber) {
+        if (verifyUser(firstName, lastName, address, phoneNumber)) {
+            String userID = Long.toString(new Random().nextLong());
             Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
             visitors.put(userID, newVisitor);
+            return "register," + userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";";
+        } else {
+            return "register,duplicate;";
         }
     }
 

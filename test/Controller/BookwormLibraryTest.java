@@ -87,7 +87,7 @@ public class BookwormLibraryTest {
 
         ArrayList<String> expectedAuthors = new ArrayList<>();
         expectedAuthors.add("Herman Melville");
-        Book book = new Book("9780553213119","Moby Dick", expectedAuthors,"Richard Bentley", "1851",3, 1);
+        Book book = new Book("9780553213119","Moby Dick", expectedAuthors,"Richard Bentley", Calendar.getInstance().getTime(),3);
 
         expectedBooks.put("9780553213119", book);
 

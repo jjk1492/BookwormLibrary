@@ -17,13 +17,15 @@ public class Visitor {
     private String address;
     private String phoneNumber;
     private String userID;
+
+    private double fine = 0.0;
     /**
      * Constructor for a visitor, contains name, contact info, and an ID number.
-     * @param firstName
-     * @param lastName
-     * @param address
-     * @param phoneNumber
-     * @param userID
+     * @param firstName First name of Visitor
+     * @param lastName Last name of Visitor
+     * @param address Address of Visitor
+     * @param phoneNumber Visitor's phone number
+     * @param userID Unique 10 digit ID
      */
     public Visitor(String firstName, String lastName, String address, String phoneNumber, String userID) {
         this.firstName = firstName;
