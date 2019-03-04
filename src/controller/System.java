@@ -4,12 +4,6 @@ import commands.*;
 
 public class System {
 
-    private BookwormLibrary library;
-
-    public System(BookwormLibrary library){
-        this.library = library;
-    }
-
     public String runCommand(String s) {
         String s1 = s.replaceAll("\\s", ""); //remove spaces from input
         String[] args = s1.split(",");          //split the string on commas
