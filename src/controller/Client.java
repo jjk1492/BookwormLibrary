@@ -1,12 +1,6 @@
 package controller;
 
 import commands.*;
-import model.Book;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Client {
@@ -58,6 +52,12 @@ public class Client {
     }
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         Client client = new Client();
+
+        while (true) {
+            String line = scanner.nextLine();
+            System.out.println(client.runCommand(line));
+        }
     }
 }
