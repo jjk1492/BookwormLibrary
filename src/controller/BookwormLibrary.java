@@ -258,6 +258,26 @@ public class BookwormLibrary {
         }
     }
 
+    public String buyBook(String isbn, int quantity){
+        if(books.containsKey(isbn)){
+            books.get(isbn).addCopies(quantity);
+            return books.get(isbn).toString();
+        }else{
+            for(Book b : catalogue){
+                if(b.getISBN().equals(isbn)){
+                    try {
+                        Book b1 = new Book(b.getISBN(), b.getTitle(), b.getAuthors(), b.getPublisher(), new SimpleDateFormat("yyyy-MM-dd").parse(b.getPublishDate()), b.getPageCount());
+                        books.put(isbn, b1);
+                        return b1.toString();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
