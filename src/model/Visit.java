@@ -30,6 +30,9 @@ public class Visit {
     public Date getStartDate() {
         return date;
     }
+    public long getStartTime(){
+        return startTime;
+    }
 
     /**
      * Get the visitor ID
