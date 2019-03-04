@@ -79,7 +79,7 @@ public class BookwormLibrary {
     public HashMap<String, Visitor> getVisitors() {
         return visitors;
     }
-    
+
     public ArrayList<Visit> getCurrentVisits() {
         return currentVisits;
     }
