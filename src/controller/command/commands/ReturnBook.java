@@ -1,12 +1,34 @@
-package commands;
+package controller.command.commands;
+
+import controller.command.Command;
 
 import java.util.ArrayList;
 
 /**
- * Return a book to the library command
+ * Return a book to the library Command
  */
-public class returnBook extends command {
+public class ReturnBook implements Command {
+    public ReturnBook() {
+    }
+
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+
+
+    /*@Override
     public String runCommand(String[] args) {
         if (args.length >= 3) {
             ArrayList < String > ids = new ArrayList < > ();
@@ -18,5 +40,5 @@ public class returnBook extends command {
         } else {
             return "return,missing-parameters,{visitorID,id[,id]};";
         }
-    }
+    }*/
 }
