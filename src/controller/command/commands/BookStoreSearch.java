@@ -1,16 +1,32 @@
-package commands;
+package controller.command.commands;
 
-import model.Book;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import controller.command.Command;
 
 /**
  * Search the book Store
  */
-public class bookStoreSearch extends command {
+public class BookStoreSearch implements Command {
+
+
+    public BookStoreSearch() {
+    }
+
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+    /*@Override
     public String runCommand(String[] args) {
         String title = args[1];
         ArrayList < String > authors = new ArrayList < > ();
@@ -66,5 +82,6 @@ public class bookStoreSearch extends command {
         }
 
         return "";
-    }
+    }*/
+
 }

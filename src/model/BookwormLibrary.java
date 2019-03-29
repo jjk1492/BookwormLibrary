@@ -1,9 +1,4 @@
-package controller;
-
-import model.Book;
-import model.CheckOut;
-import model.Visit;
-import model.Visitor;
+package model;
 
 
 import java.io.FileNotFoundException;
@@ -65,8 +60,8 @@ public class BookwormLibrary {
 
 
     /**
-     * Retrieve the one and only instance of the controller.BookwormLibrary.
-     * @return The instance of the controller.BookwormLibrary
+     * Retrieve the one and only instance of the model.BookwormLibrary.
+     * @return The instance of the model.BookwormLibrary
      */
     public static BookwormLibrary getInstance() {
         return INSTANCE;

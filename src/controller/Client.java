@@ -1,65 +1,55 @@
 package controller;
 
-import commands.*;
+import com.oracle.tools.packager.Log;
+import controller.command.*;
+import controller.command.commands.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
  * Class that interacts with the "server" (library)
- * Handles parsing of commands
+ * Handles parsing of controller.command
  */
 public class Client {
 
-    public String runCommand(String s) {
-        String s1 = s.replaceAll("\\s", ""); //remove spaces from input
-        String[] args = s1.split(","); //split the string on commas
+    private Invoker invoker;
+    private Long clientID;
 
-        if (!args[args.length - 1].endsWith(";")) {
-            return "partial-request;";
+    public static List<Long> usedClientIDs;
+
+    public Client(){
+        if(usedClientIDs == null){
+            usedClientIDs = new ArrayList<>();
         }
+        clientID = getUnusedClientID();
+    }
 
-        //Remove ";" from end of the last string
-        args[args.length - 1] = args[args.length - 1].substring(0, args[args.length - 1].length() - 1);
+    public Long getClientID(){
+        return clientID;
+    }
 
-
-        switch (args[0]) {
-            case "register":
-                return new registerVisitor().runCommand(args);
-            case "arrive":
-                return new beginVisit().runCommand(args);
-            case "depart":
-                return new endVisit().runCommand(args);
-            case "info":
-                return new libraryBookSearch().runCommand(args);
-            case "borrow":
-                return new borrowBook().runCommand(args);
-            case "borrowed":
-                return new findBorrowBook().runCommand(args);
-            case "return":
-                return new returnBook().runCommand(args);
-            case "pay":
-                return new payFine().runCommand(args);
-            case "search":
-                return new bookStoreSearch().runCommand(args);
-            case "buy":
-                return new bookPurchase().runCommand(args);
-            case "advance":
-                return new advanceTime().runCommand(args);
-            case "datetime":
-                return new currentTime().runCommand(args);
-            case "report":
-                return new report().runCommand(args);
-            default:
-                return "Error:Unknown Command";
+    private Long getUnusedClientID(){
+        Random r = new Random();
+        while (true){
+            long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;
+            if(!usedClientIDs.contains(id)){
+                usedClientIDs.add(id);
+                return id;
+            }
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Client client = new Client();
+    public void dispose(){
+        invoker = null;
+        clientID = null;
+    }
 
-        while (true) {
-            String line = scanner.nextLine();
-            System.out.println(client.runCommand(line));
+    public static void removeClientID(Long id){
+        if(usedClientIDs.contains(id)){
+            usedClientIDs.remove(id);
         }
     }
 }

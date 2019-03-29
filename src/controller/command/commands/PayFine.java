@@ -1,12 +1,33 @@
-package commands;
+package controller.command.commands;
 
+import controller.command.Command;
 import model.Visitor;
 
 /**
- * Pay a user's fine command
+ * Pay a user's fine Command
  */
-public class payFine extends command {
+public class PayFine implements Command {
+
+
+    public PayFine() {
+    }
+
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+    /*@Override
     public String runCommand(String[] args) {
         if (args.length == 3) {
             Visitor v = library.getVisitors().get(args[1]);
@@ -17,11 +38,11 @@ public class payFine extends command {
                 if (d <= 0 || d > v.getFine()) {
                     return "pay,invalid-amount," + d + "," + v.getFine() + ";";
                 }
-                v.payFine(d);
+                v.PayFine(d);
                 return "pay,success," + v.getFine() + ";";
             }
         } else {
             return "pay,missing-parameters,{visitorID,amount};";
         }
-    }
+    }*/
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * A book belonging to the controller.BookwormLibrary. Books are created when their purchased, or loaded in from persistent data.
+ * A book belonging to the model.BookwormLibrary. Books are created when their purchased, or loaded in from persistent data.
  *
  * @author John Knecht V (jjk1492@rit.edu)
  */

@@ -1,13 +1,30 @@
-package commands;
+package controller.command.commands;
 
-import java.util.ArrayList;
+import controller.command.Command;
 
 /**
- * Borrow a book command class
+ * Borrow a book Command class
  */
-public class borrowBook extends command {
+public class BorrowBook implements Command {
+    public BorrowBook() {
+    }
 
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+    /*@Override
     public String runCommand(String[] args) {
         if (args.length >= 3) {
             ArrayList < String > ids = new ArrayList < > ();
@@ -40,5 +57,5 @@ public class borrowBook extends command {
             return "borrow," + library.checkOut(args[1], ids) + ";";
         }
         return "borrow,missing-parameters,{visitorID,{id}};";
-    }
+    }*/
 }

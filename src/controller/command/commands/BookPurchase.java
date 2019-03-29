@@ -1,10 +1,31 @@
-package commands;
+package controller.command.commands;
+
+import controller.command.Command;
 
 /**
- * Purchase a book from catalogue command
+ * Purchase a book from catalogue Command
  */
-public class bookPurchase extends command {
+public class BookPurchase implements Command {
+
+    public BookPurchase() {
+    }
+
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+    /*@Override
     public String runCommand(String[] args) {
         if (args.length >= 3) {
             int quantity = Integer.parseInt(args[1]);
@@ -22,5 +43,5 @@ public class bookPurchase extends command {
         }
 
         return "buy,missing-parameters,{quantity,id[,ids]};";
-    }
+    }*/
 }

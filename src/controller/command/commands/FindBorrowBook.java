@@ -1,12 +1,32 @@
-package commands;
+package controller.command.commands;
 
+import controller.command.Command;
 import model.CheckOut;
 
 /**
- * Find borrowed books from a user command
+ * Find borrowed books from a user Command
  */
-public class findBorrowBook extends command {
+public class FindBorrowBook implements Command {
+
+    public FindBorrowBook() {
+    }
+
     @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public void redo() {
+
+    }
+
+    /*@Override
     public String runCommand(String[] args) {
         if (args.length == 2) {
             if (library.getCheckedOutBooks().containsKey(args[1])) {
@@ -31,5 +51,5 @@ public class findBorrowBook extends command {
         } else {
             return "borrowed,missing-parameters,{visitor ID};";
         }
-    }
+    }*/
 }
