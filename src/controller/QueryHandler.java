@@ -43,6 +43,8 @@ public class QueryHandler {
 
         //TODO:Fix this to the proper format (if there is one) including safe shutdown
         if(args.length == 1 && args[0].equals("shutdown")){
+            Command cm = new shutdown();
+            cm.execute();
             System.out.println("shutting-down;");
             return false;
         }
