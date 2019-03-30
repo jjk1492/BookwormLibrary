@@ -6,24 +6,13 @@ import controller.command.Command;
  * Register a user to the library Command
  */
 public class RegisterVisitor implements Command {
-    public RegisterVisitor() {
+    public RegisterVisitor(String[] args) {
     }
 
     @Override
     public void execute() {
 
     }
-
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
 
     /*@Override
     public String runCommand(String[] args) {

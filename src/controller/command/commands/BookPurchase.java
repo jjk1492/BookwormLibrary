@@ -15,16 +15,6 @@ public class BookPurchase implements Command {
 
     }
 
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
     /*@Override
     public String runCommand(String[] args) {
         if (args.length >= 3) {

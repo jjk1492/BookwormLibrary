@@ -10,12 +10,12 @@ public class Invoker {
     /**
      * The undo stack that handles the controller.command to undo
      */
-    private Stack<Command> undoStack;
+    private Stack<UndoableCommand> undoStack;
 
     /**
      * The redo stack that handles the controller.command to redo
      */
-    private Stack<Command> redoStack;
+    private Stack<UndoableCommand> redoStack;
 
     /**
      * Constructor for the Invoker
@@ -31,7 +31,7 @@ public class Invoker {
      * Called from the class that creates the command
      * @param cm - the command that is being executed
      */
-    public void execute(Command cm){
+    public void execute(UndoableCommand cm){
         undoStack.push(cm);
         redoStack.clear();
         cm.execute();
@@ -43,7 +43,7 @@ public class Invoker {
      */
     public void undo(){
         if(!undoStack.empty()){
-            Command cm = undoStack.pop();
+            UndoableCommand cm = undoStack.pop();
             cm.undo();
             redoStack.push(cm);
         }
@@ -54,8 +54,17 @@ public class Invoker {
      * Redos the recent command from the stack
      */
     public void redo(){
-        Command cm = redoStack.pop();
+        UndoableCommand cm = redoStack.pop();
         cm.execute();
         undoStack.push(cm);
+    }
+
+    /**
+     * reset function
+     * resets the stacks when a command that cannot be undone is called
+     */
+    public void reset(){
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
     }
 }

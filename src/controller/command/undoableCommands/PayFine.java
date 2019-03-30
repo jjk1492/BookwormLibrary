@@ -1,15 +1,13 @@
-package controller.command.commands;
+package controller.command.undoableCommands;
 
-import controller.command.Command;
-import model.Visitor;
+import controller.command.UndoableCommand;
 
 /**
  * Pay a user's fine Command
  */
-public class PayFine implements Command {
+public class PayFine implements UndoableCommand {
 
-
-    public PayFine() {
+    public PayFine(String[] args) {
     }
 
     @Override

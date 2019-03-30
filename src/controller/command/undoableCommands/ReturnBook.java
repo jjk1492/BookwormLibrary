@@ -1,14 +1,12 @@
-package controller.command.commands;
+package controller.command.undoableCommands;
 
-import controller.command.Command;
-
-import java.util.ArrayList;
+import controller.command.UndoableCommand;
 
 /**
  * Return a book to the library Command
  */
-public class ReturnBook implements Command {
-    public ReturnBook() {
+public class ReturnBook implements UndoableCommand {
+    public ReturnBook(String[] args) {
     }
 
     @Override

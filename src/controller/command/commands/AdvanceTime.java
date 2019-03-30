@@ -7,18 +7,10 @@ import controller.command.Command;
  */
 public class AdvanceTime implements Command {
 
-    public AdvanceTime() {
+    public AdvanceTime(String[] args) {
     }
 
     @Override
     public void execute() {
-    }
-
-    @Override
-    public void undo() {
-    }
-
-    @Override
-    public void redo() {
     }
 }

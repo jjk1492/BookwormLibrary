@@ -14,14 +14,4 @@ public class CurrentTime implements Command {
     public void execute() {
 
     }
-
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
-
-    }
 }

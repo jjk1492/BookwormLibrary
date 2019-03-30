@@ -1,12 +1,12 @@
-package controller.command.commands;
+package controller.command.undoableCommands;
 
-import controller.command.Command;
+import controller.command.UndoableCommand;
 
 /**
  * Borrow a book Command class
  */
-public class BorrowBook implements Command {
-    public BorrowBook() {
+public class BorrowBook implements UndoableCommand {
+    public BorrowBook(String[] args) {
     }
 
     @Override

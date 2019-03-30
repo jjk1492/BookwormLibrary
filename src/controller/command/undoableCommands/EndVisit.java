@@ -1,13 +1,13 @@
-package controller.command.commands;
+package controller.command.undoableCommands;
 
-import controller.command.Command;
+import controller.command.UndoableCommand;
 
 /**
  * End a visit Command
  */
-public class EndVisit implements Command {
+public class EndVisit implements UndoableCommand {
 
-    public EndVisit() {
+    public EndVisit(String[] args) {
     }
 
     @Override

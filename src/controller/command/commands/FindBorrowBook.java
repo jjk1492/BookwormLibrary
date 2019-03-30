@@ -8,21 +8,11 @@ import model.CheckOut;
  */
 public class FindBorrowBook implements Command {
 
-    public FindBorrowBook() {
+    public FindBorrowBook(String[] args) {
     }
 
     @Override
     public void execute() {
-
-    }
-
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
 
     }
 

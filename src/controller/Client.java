@@ -42,6 +42,18 @@ public class Client {
         }
     }
 
+    public void execute(UndoableCommand cm){
+        invoker.execute(cm);
+    }
+
+    public void undo(){
+        invoker.undo();
+    }
+
+    public void redo(){
+        invoker.redo();
+    }
+
     public void dispose(){
         invoker = null;
         clientID = null;

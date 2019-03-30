@@ -8,21 +8,11 @@ import controller.command.Command;
 public class BookStoreSearch implements Command {
 
 
-    public BookStoreSearch() {
+    public BookStoreSearch(String[] args) {
     }
 
     @Override
     public void execute() {
-
-    }
-
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
 
     }
 

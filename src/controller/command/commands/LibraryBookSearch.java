@@ -12,25 +12,13 @@ import java.util.Comparator;
  */
 public class LibraryBookSearch implements Command {
 
-    public LibraryBookSearch() {
+    public LibraryBookSearch(String[] args) {
     }
 
     @Override
     public void execute() {
 
     }
-
-    @Override
-    public void undo() {
-
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
-
 
     /*@Override
     public String runCommand(String[] args) {
