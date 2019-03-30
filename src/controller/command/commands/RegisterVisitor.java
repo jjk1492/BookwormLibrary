@@ -4,6 +4,8 @@ import controller.command.Command;
 import model.BookwormLibrary;
 import model.Visitor;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Register a user to the library Command
  */
@@ -36,7 +38,7 @@ public class RegisterVisitor implements Command {
         if(correctArgCount){
             if(BookwormLibrary.getInstance().verifyUser(firstName,lastName,address,phoneNumber)){
                 Visitor visitor = BookwormLibrary.getInstance().registerUser(firstName,lastName,address,phoneNumber);
-                System.out.println(clientid + "," + visitor.getUserID() + ",registration date;");
+                System.out.println(clientid + "," + visitor.getUserID() + "," + visitor.getTimeOfCreation().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ";");
             }else{
                 System.out.println(clientid + ",register,duplicate;");
             }

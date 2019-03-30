@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,7 @@ public class Visitor {
     private String address;
     private String phoneNumber;
     private Long userID;
+    private LocalDateTime timeOfCreation;
 
     private double fine = 0.0;
     /**
@@ -25,12 +27,17 @@ public class Visitor {
      * @param phoneNumber Visitor's phone number
      * @param userID Unique 10 digit ID
      */
-    Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID) {
+    Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID, LocalDateTime time) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.userID = userID;
+        this.timeOfCreation = time.plusNanos(0);
+    }
+
+    public LocalDateTime getTimeOfCreation() {
+        return timeOfCreation;
     }
 
     /**

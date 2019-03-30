@@ -2,6 +2,9 @@ package model;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -9,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -24,6 +28,7 @@ public class BookwormLibrary {
     private final static String BOOKS_FILE = "savedBooks.json";
     private final static String VISITORS_FILE = "savedVisitors.json";
     private final static String CHECKOUTS_FILE = "savedCheckOuts.json";
+    private final static String DATETIME_FILE = "savedDateTime.json";
     //ArrayList of purchasable books
     private ArrayList < Book > catalogue;
 
@@ -41,6 +46,8 @@ public class BookwormLibrary {
     //ArrayList of current visitors in Library
     private ArrayList < Visit > currentVisits;
 
+    private LocalDateTime time;
+
     /**
      * Lazy constructor
      *
@@ -49,6 +56,9 @@ public class BookwormLibrary {
     public BookwormLibrary() {
         if(INSTANCE == null) {
             INSTANCE = this;
+            if(!loadDateTime()){
+                time = LocalDateTime.now();
+            }
             this.catalogue = this.readInBooks();
             this.books = new HashMap < > ();
             this.visitors = new HashMap < > ();
@@ -109,6 +119,24 @@ public class BookwormLibrary {
      */
     public HashMap < Long, ArrayList < CheckOut >> getCheckedOutBooks() {
         return checkedOutBooks;
+    }
+
+    public void advanceTimeDays(int amount){
+        time.plusDays(amount);
+    }
+
+    public void advanceTimeHours(int amount){
+        time.plusHours(amount);
+    }
+
+    private boolean loadDateTime(){
+        try {
+            Gson gson = new Gson();
+            time = gson.fromJson(DATETIME_FILE, LocalDateTime.class);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     /**
@@ -199,7 +227,7 @@ public class BookwormLibrary {
      * @return True if the the user can register, false otherwise
      */
     public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber) {
-        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, 1111111111L);
+        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, 1111111111L, time);
         return !this.visitors.containsValue(temp);
     }
 
@@ -212,7 +240,7 @@ public class BookwormLibrary {
      */
     public Visitor registerUser(String firstName, String lastName, String address, String phoneNumber) {
         Long userID = getUnusedVisitorID();
-        Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
+        Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID, time);
         visitors.put(userID, newVisitor);
         return newVisitor;
     }
@@ -288,11 +316,13 @@ public class BookwormLibrary {
         String booksJSON = gson.toJson(this.books);
         String visitorsJSON = gson.toJson(this.visitors);
         String checkOutsJSON = gson.toJson(this.checkedOutBooks);
+        String dateTimeJSON = gson.toJson(this.time);
 
         //Save all the data to their own files
         saveData(BOOKS_FILE, booksJSON);
         saveData(VISITORS_FILE, visitorsJSON);
         saveData(CHECKOUTS_FILE, checkOutsJSON);
+        saveData(DATETIME_FILE, dateTimeJSON);
     }
 
     /**
@@ -302,11 +332,12 @@ public class BookwormLibrary {
      */
     private void saveData(String fileName, String fileData){
         try{
-            PrintWriter writer = new PrintWriter("../shutdownFiles/" + fileName, "UTF-8");
+            PrintWriter writer = new PrintWriter("src/model/shutdownFiles/" + fileName, "UTF-8");
             writer.println(fileData);
             writer.close();
         }catch (FileNotFoundException e) {
             System.out.println("Error: " + fileName + " could not be found.");
+            e.printStackTrace();
         } catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
