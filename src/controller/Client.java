@@ -1,13 +1,10 @@
 package controller;
 
-import com.oracle.tools.packager.Log;
 import controller.command.*;
-import controller.command.commands.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Class that interacts with the "server" (library)
@@ -19,9 +16,9 @@ public class Client {
     private Long clientID;
     private String service;
 
-    public static List<Long> usedClientIDs;
+    private static List<Long> usedClientIDs;
 
-    public Client(){
+    Client(){
         if(usedClientIDs == null){
             usedClientIDs = new ArrayList<>();
         }
