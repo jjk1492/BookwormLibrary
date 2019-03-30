@@ -17,6 +17,7 @@ public class Client {
 
     private Invoker invoker;
     private Long clientID;
+    private String service;
 
     public static List<Long> usedClientIDs;
 
@@ -63,5 +64,13 @@ public class Client {
         if(usedClientIDs.contains(id)){
             usedClientIDs.remove(id);
         }
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
     }
 }

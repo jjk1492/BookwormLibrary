@@ -10,10 +10,14 @@ import java.util.Map;
 
 public class QueryHandler {
 
-    private Map<Long, Client> activeClients;
+    public static Map<Long, Client> activeClients;
 
     public QueryHandler(){
         activeClients = new HashMap<>();
+    }
+
+    public static Map<Long, Client> getActiveClients() {
+        return activeClients;
     }
 
     public boolean handleQuery(String query){
@@ -43,12 +47,18 @@ public class QueryHandler {
             return false;
         }
 
-        //Gets the client that called the command
+        //Check to make sure the first argument is numeric
         Client activeClient;
-        if(activeClients.keySet().contains(Long.parseLong(args[0]))){
-            activeClient = activeClients.get(Long.parseLong(args[0]));
-        }else {
-            System.out.println("invalid-client-id;");
+        if (args[0].matches("[0-9]+") && args[0].length() > 2){
+            //Gets the client that called the command
+            if(activeClients.keySet().contains(Long.parseLong(args[0]))){
+                activeClient = activeClients.get(Long.parseLong(args[0]));
+            }else {
+                System.out.println("invalid-client-id;");
+                return true;
+            }
+        }else{
+            System.out.println("bad-client-id;");
             return true;
         }
 
@@ -136,8 +146,8 @@ public class QueryHandler {
                 cm = new Report(args);
                 cm.execute();
                 return true;
-            default:
-                System.out.println("unknown-command");
+            default:                                                //Client input a unknown command
+                System.out.println("unknown-command;");
                 return true;
         }
     }
