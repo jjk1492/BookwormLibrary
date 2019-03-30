@@ -36,7 +36,7 @@ public class BookwormLibrary {
     private List<Long> usedVisitorIds;
 
     //HashMap key is the visitors uniqueID
-    private HashMap < String, ArrayList < CheckOut >> checkedOutBooks;
+    private HashMap < Long, ArrayList < CheckOut >> checkedOutBooks;
 
     //ArrayList of current visitors in Library
     private ArrayList < Visit > currentVisits;
@@ -63,7 +63,7 @@ public class BookwormLibrary {
      * @param books - HashMap for the books
      * @param visitors - HashMap for the visitors
      */
-    public BookwormLibrary(HashMap < String, Book > books, HashMap < Long, Visitor > visitors, HashMap < String, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
+    public BookwormLibrary(HashMap < String, Book > books, HashMap < Long, Visitor > visitors, HashMap < Long, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
         this.books = books;
         this.visitors = visitors;
         this.checkedOutBooks = checkedOutBooks;
@@ -107,7 +107,7 @@ public class BookwormLibrary {
      * Get the books each member has checked out
      * @return HashMap<VisitorID, ArrayList<Checkout>> of all checked out books
      */
-    public HashMap < String, ArrayList < CheckOut >> getCheckedOutBooks() {
+    public HashMap < Long, ArrayList < CheckOut >> getCheckedOutBooks() {
         return checkedOutBooks;
     }
 
@@ -116,7 +116,7 @@ public class BookwormLibrary {
      * @param visitorID Visitor
      * @return string of error or success
      */
-    public String addToVisits(String visitorID) {
+    public String addToVisits(Long visitorID) {
         Visitor v = this.visitors.get(visitorID);
         if (v == null) {
             return "invalid-id";
@@ -136,7 +136,7 @@ public class BookwormLibrary {
      * @param visitorID Visitor
      * @return string of error or success
      */
-    public String removeFromVisits(String visitorID) {
+    public String removeFromVisits(Long visitorID) {
         for (Visit vis: this.currentVisits) {
             if (visitorID.equals(vis.getVisitorId())) {
                 vis.endVisit();
@@ -234,7 +234,7 @@ public class BookwormLibrary {
      * @param bookIDs - Book being checked out
      * @return boolean if the checkout was successful
      */
-    public String checkOut(String visitorID, ArrayList < String > bookIDs) {
+    public String checkOut(Long visitorID, ArrayList < String > bookIDs) {
 
         //Ensure the requested book and user are in the system
         if (visitors.containsKey(visitorID)) {
@@ -318,7 +318,7 @@ public class BookwormLibrary {
      * @param bookIDs - Array of book ISBNs that are being checked in by the visitor
      * @return - Stringing explaining the error or telling the fee amount.
      */
-    public String checkIn(String visitorID, ArrayList < String > bookIDs) {
+    public String checkIn(Long visitorID, ArrayList < String > bookIDs) {
 
         if (visitors.containsKey(visitorID)) {
             String invalidIDs = "";
