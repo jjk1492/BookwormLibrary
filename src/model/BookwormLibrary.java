@@ -121,12 +121,16 @@ public class BookwormLibrary {
         return checkedOutBooks;
     }
 
+    public LocalDateTime getTime() {
+        return time;
+    }
+
     public void advanceTimeDays(int amount){
-        time.plusDays(amount);
+        time = time.plusDays(amount);
     }
 
     public void advanceTimeHours(int amount){
-        time.plusHours(amount);
+        time = time.plusHours(amount);
     }
 
     private boolean loadDateTime(){

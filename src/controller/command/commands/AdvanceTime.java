@@ -49,5 +49,6 @@ public class AdvanceTime implements Command {
         if(hours != -1){
             BookwormLibrary.getInstance().advanceTimeHours(hours);
         }
+        System.out.println(clientID + "advance,success;");
     }
 }
