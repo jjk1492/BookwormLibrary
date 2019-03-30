@@ -12,7 +12,7 @@ public class QueryHandler {
 
     private static Map<Long, Client> activeClients;
 
-    public QueryHandler(){
+    QueryHandler(){
         activeClients = new HashMap<>();
     }
 
@@ -141,7 +141,7 @@ public class QueryHandler {
                 cm.execute();
                 return true;
             case "datetime":                                        //Client wants a report on current time
-                cm = new CurrentTime();
+                cm = new CurrentTime(args);
                 cm.execute();
                 return true;
             case "report":                                          //Client wants a report on the library
