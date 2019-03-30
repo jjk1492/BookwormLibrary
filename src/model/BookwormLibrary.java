@@ -1,16 +1,14 @@
 package model;
 
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
-import java.io.File;
+import java.io.*;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -29,6 +27,10 @@ public class BookwormLibrary {
     private final static String VISITORS_FILE = "savedVisitors.json";
     private final static String CHECKOUTS_FILE = "savedCheckOuts.json";
     private final static String DATETIME_FILE = "savedDateTime.json";
+
+    private final static String FILE_PATH = "src/model/shutdownFiles/";
+
+    private final static Gson gson = new Gson();
 
     //ArrayList of purchasable books
     private ArrayList < Book > catalogue;
@@ -59,10 +61,50 @@ public class BookwormLibrary {
                 time = LocalDateTime.now();
             }
             this.catalogue = this.readInBooks();
+            this.currentVisits = new ArrayList < > ();
+            try{
+                System.out.println("Loading previous data...");
+                Type bookType = new TypeToken<HashMap<String, Book>>(){}.getType();
+                JsonReader reader = new JsonReader(new FileReader(FILE_PATH + BOOKS_FILE));
+                this.books = gson.fromJson(reader, bookType);
+                reader.close();
+                System.out.println("Books loaded.");
+
+            }catch (Exception e){
+                this.books = new HashMap<>();
+                System.out.println("No books found.");
+            }
+
+            try{
+
+                Type visitorType = new TypeToken<HashMap<Long, Visitor>>(){}.getType();
+                JsonReader reader = new JsonReader( new FileReader(FILE_PATH + VISITORS_FILE));
+                this.visitors = gson.fromJson(reader, visitorType);
+                reader.close();
+                System.out.println("Visitors loaded.");
+
+            }catch (Exception e){
+                this.visitors = new HashMap<>();
+                System.out.println("No visitors found.");
+            }
+
+            try{
+
+                Type checkoutType = new TypeToken<HashMap<Long, ArrayList<CheckOut>>>(){}.getType();
+                JsonReader reader = new JsonReader(new FileReader(FILE_PATH + CHECKOUTS_FILE));
+                this.checkedOutBooks = gson.fromJson(reader, checkoutType);
+                reader.close();
+                System.out.println("Checkouts loaded.\n");
+
+            }catch (Exception e){
+                this.checkedOutBooks = new HashMap<>();
+                System.out.println("No checkouts found.\n");
+            }
+
+
             this.books = new HashMap < > ();
             this.visitors = new HashMap < > ();
             this.checkedOutBooks = new HashMap < > ();
-            this.currentVisits = new ArrayList < > ();
         }
     }
 
@@ -340,33 +382,22 @@ public class BookwormLibrary {
         currentVisits.clear();
 
         //Convert all required data structures to JSON
-        Gson gson = new Gson();
-        String booksJSON = gson.toJson(this.books);
-        String visitorsJSON = gson.toJson(this.visitors);
-        String checkOutsJSON = gson.toJson(this.checkedOutBooks);
-        String dateTimeJSON = gson.toJson(this.time);
+        Gson gsonBuilder = new GsonBuilder().create();
 
-        //Save all the data to their own files
-        saveData(BOOKS_FILE, booksJSON);
-        saveData(VISITORS_FILE, visitorsJSON);
-        saveData(CHECKOUTS_FILE, checkOutsJSON);
-        saveData(DATETIME_FILE, dateTimeJSON);
-    }
-
-    /**
-     * Saves the JSON representation of an object to a file for persistent system data.
-     * @param fileName - Name of the file to save to
-     * @param fileData - JSON representation of a data structure
-     */
-    private void saveData(String fileName, String fileData){
         try{
-            PrintWriter writer = new PrintWriter("src/model/shutdownFiles/" + fileName, "UTF-8");
-            writer.println(fileData);
+            Writer writer = new PrintWriter(FILE_PATH + BOOKS_FILE, "UTF-8");
+            gsonBuilder.toJson(this.books, writer);
             writer.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("Error: " + fileName + " could not be found.");
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e){
+
+            writer = new PrintWriter(FILE_PATH + VISITORS_FILE, "UTF-8");
+            gsonBuilder.toJson(this.visitors, writer);
+            writer.close();
+
+            writer = new PrintWriter(FILE_PATH + CHECKOUTS_FILE, "UTF-8");
+            gsonBuilder.toJson(this.checkedOutBooks, writer);
+            writer.close();
+
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
