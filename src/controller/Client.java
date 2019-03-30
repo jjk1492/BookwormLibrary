@@ -8,7 +8,6 @@ import java.util.Random;
 
 /**
  * Class that interacts with the "server" (library)
- * Handles parsing of controller.command
  */
 public class Client {
 

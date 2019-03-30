@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class QueryHandler {
 
-    private static Map<Long, Client> activeClients;
+    private static Map<Long, Client> activeClients; //
 
     QueryHandler(){
         activeClients = new HashMap<>();

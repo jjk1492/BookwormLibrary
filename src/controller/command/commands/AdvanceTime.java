@@ -45,10 +45,12 @@ public class AdvanceTime implements Command {
 
     @Override
     public void execute() {
-        BookwormLibrary.getInstance().advanceTimeDays(days);
-        if(hours != -1){
-            BookwormLibrary.getInstance().advanceTimeHours(hours);
+        if(correct) {
+            BookwormLibrary.getInstance().advanceTimeDays(days);
+            if (hours != -1) {
+                BookwormLibrary.getInstance().advanceTimeHours(hours);
+            }
+            System.out.println(clientID + ",advance,success;");
         }
-        System.out.println(clientID + "advance,success;");
     }
 }
