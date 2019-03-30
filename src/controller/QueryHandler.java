@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class QueryHandler {
 
-    public static Map<Long, Client> activeClients;
+    private static Map<Long, Client> activeClients;
 
     public QueryHandler(){
         activeClients = new HashMap<>();
@@ -43,7 +43,7 @@ public class QueryHandler {
 
         //TODO:Fix this to the proper format (if there is one) including safe shutdown
         if(args.length == 1 && args[0].equals("shutdown")){
-            System.out.println("shutting-down");
+            System.out.println("shutting-down;");
             return false;
         }
 

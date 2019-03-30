@@ -17,16 +17,18 @@ import java.util.*;
  */
 public class BookwormLibrary {
 
-    private static BookwormLibrary INSTANCE = new BookwormLibrary();
+    private static BookwormLibrary INSTANCE;
 
     //ArrayList of purchasable books
-    private ArrayList < Book > catalogue = this.readInBooks();
+    private ArrayList < Book > catalogue;
 
     //HashMap key is the ISBN of the book
     private HashMap < String, Book > books;
 
     //HashMap key is the visitors uniqueID
-    private HashMap < String, Visitor > visitors;
+    private HashMap < Long, Visitor > visitors;
+
+    private List<Long> usedVisitorIds;
 
     //HashMap key is the visitors uniqueID
     private HashMap < String, ArrayList < CheckOut >> checkedOutBooks;
@@ -39,11 +41,16 @@ public class BookwormLibrary {
      *
      * Create HashMaps for books and visitors
      */
-    private BookwormLibrary() {
-        this.books = new HashMap < > ();
-        this.visitors = new HashMap < > ();
-        this.checkedOutBooks = new HashMap < > ();
-        this.currentVisits = new ArrayList < > ();
+    public BookwormLibrary() {
+        if(INSTANCE == null) {
+            INSTANCE = this;
+            this.catalogue = this.readInBooks();
+            this.books = new HashMap < > ();
+            this.visitors = new HashMap < > ();
+            this.usedVisitorIds = new ArrayList<>();
+            this.checkedOutBooks = new HashMap < > ();
+            this.currentVisits = new ArrayList < > ();
+        }
     }
 
     /**
@@ -51,7 +58,7 @@ public class BookwormLibrary {
      * @param books - HashMap for the books
      * @param visitors - HashMap for the visitors
      */
-    public BookwormLibrary(HashMap < String, Book > books, HashMap < String, Visitor > visitors, HashMap < String, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
+    public BookwormLibrary(HashMap < String, Book > books, HashMap < Long, Visitor > visitors, HashMap < String, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
         this.books = books;
         this.visitors = visitors;
         this.checkedOutBooks = checkedOutBooks;
@@ -71,7 +78,7 @@ public class BookwormLibrary {
      * Get all of the visitors that have visited the library
      * @return Hasmap<VisitorId, Visitor>
      */
-    public HashMap < String, Visitor > getVisitors() {
+    public HashMap < Long, Visitor > getVisitors() {
         return visitors;
     }
 
@@ -187,7 +194,7 @@ public class BookwormLibrary {
      * @return True if the the user can register, false otherwise
      */
     public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber) {
-        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, "TestUser");
+        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, 1111111111L);
         return !this.visitors.containsValue(temp);
     }
 
@@ -198,14 +205,21 @@ public class BookwormLibrary {
      * @param address - Visitor's address
      * @param phoneNumber - Visitor's phone number
      */
-    public String registerUser(String firstName, String lastName, String address, String phoneNumber) {
-        if (verifyUser(firstName, lastName, address, phoneNumber)) {
-            String userID = Long.toString(new Random().nextLong());
-            Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
-            visitors.put(userID, newVisitor);
-            return userID + "," + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        } else {
-            return "duplicate";
+    public Visitor registerUser(String firstName, String lastName, String address, String phoneNumber) {
+        Long userID = getUnusedVisitorID();
+        Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID);
+        visitors.put(userID, newVisitor);
+        return newVisitor;
+    }
+
+    private Long getUnusedVisitorID(){
+        Random r = new Random();
+        while (true){
+            long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;
+            if(!usedVisitorIds.contains(id)){
+                usedVisitorIds.add(id);
+                return id;
+            }
         }
     }
 

@@ -32,7 +32,7 @@ public class Client {
         return clientID;
     }
 
-    private Long getUnusedClientID(){
+    private static Long getUnusedClientID(){
         Random r = new Random();
         while (true){
             long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;

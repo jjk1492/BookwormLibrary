@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ public class Visitor {
     private String lastName;
     private String address;
     private String phoneNumber;
-    private String userID;
+    private Long userID;
 
     private double fine = 0.0;
     /**
@@ -25,7 +26,7 @@ public class Visitor {
      * @param phoneNumber Visitor's phone number
      * @param userID Unique 10 digit ID
      */
-    public Visitor(String firstName, String lastName, String address, String phoneNumber, String userID) {
+    public Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -37,7 +38,7 @@ public class Visitor {
      * Get this Visitor's ID.
      * @return - The userID String.
      */
-    public String getUserID() {
+    public Long getUserID() {
         return userID;
     }
 

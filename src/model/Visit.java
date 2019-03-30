@@ -14,7 +14,7 @@ public class Visit {
     private long startTime = System.currentTimeMillis();
     private long endTime;
 
-    private String visitorId;
+    private Long visitorId;
 
     /**
      * Constructor for a visit, endTime is initially set to -1 indicating it hasn't ended yet.
@@ -52,7 +52,7 @@ public class Visit {
      * Get the visitor ID
      * @return visitorID
      */
-    public String getVisitorId() {
+    public Long getVisitorId() {
         return visitorId;
     }
 

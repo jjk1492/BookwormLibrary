@@ -1,5 +1,7 @@
 package controller;
 
+import model.BookwormLibrary;
+
 import java.util.Scanner;
 
 public class Launcher {
@@ -10,6 +12,7 @@ public class Launcher {
         Scanner scanner = new Scanner(System.in);
         queryHandler = new QueryHandler();
         boolean running = true;
+        BookwormLibrary bookwormLibrary = new BookwormLibrary();
 
         while (running) {
             System.out.print("Enter command: ");
