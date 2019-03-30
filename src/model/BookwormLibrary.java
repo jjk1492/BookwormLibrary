@@ -29,6 +29,7 @@ public class BookwormLibrary {
     private final static String VISITORS_FILE = "savedVisitors.json";
     private final static String CHECKOUTS_FILE = "savedCheckOuts.json";
     private final static String DATETIME_FILE = "savedDateTime.json";
+
     //ArrayList of purchasable books
     private ArrayList < Book > catalogue;
 
@@ -80,68 +81,7 @@ public class BookwormLibrary {
         this.currentVisits = currentVisits;
     }
 
-
-    /**
-     * Retrieve the one and only instance of the model.BookwormLibrary.
-     * @return The instance of the model.BookwormLibrary
-     */
-    public static BookwormLibrary getInstance() {
-        return INSTANCE;
-    }
-
-    /**
-     * Get all of the visitors that have visited the library
-     * @return Hasmap<VisitorId, Visitor>
-     */
-    public HashMap < Long, Visitor > getVisitors() {
-        return visitors;
-    }
-
-    /**
-     * Get the books that can be purchased from the catalogue
-     * @return ArrayList<BooK> of all the books that can be purchased
-     */
-    public ArrayList < Book > getCatalogue() {
-        return catalogue;
-    }
-
-    /**
-     * Get all the books the library currently owns
-     * @return ArrayList<Book> of all the books the library owns
-     */
-    public HashMap < String, Book > getBooks() {
-        return books;
-    }
-
-    /**
-     * Get the books each member has checked out
-     * @return HashMap<VisitorID, ArrayList<Checkout>> of all checked out books
-     */
-    public HashMap < Long, ArrayList < CheckOut >> getCheckedOutBooks() {
-        return checkedOutBooks;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void advanceTimeDays(int amount){
-        time = time.plusDays(amount);
-    }
-
-    public void advanceTimeHours(int amount){
-        time = time.plusHours(amount);
-    }
-
-    private boolean loadDateTime(){
-        try {
-            Gson gson = new Gson();
-            time = gson.fromJson(DATETIME_FILE, LocalDateTime.class);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
+    //VISITOR RELATED METHODS
 
     /**
      * Add a visitor to currently visiting
@@ -179,6 +119,45 @@ public class BookwormLibrary {
         return "invalid-id";
     }
 
+    /**
+     * Verifies that a new user is not already contained in the system.
+     * @param firstName - Visitor's first name
+     * @param lastName - Visitor's last name
+     * @param address - Visitor's address
+     * @param phoneNumber - Visitor's phone number
+     * @return True if the the user can register, false otherwise
+     */
+    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber) {
+        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, 1111111111L, time);
+        return !this.visitors.containsValue(temp);
+    }
+
+    /**
+     * Registers a new user and adds them to the library
+     * @param firstName - Visitor's first name
+     * @param lastName - Visitor's last name
+     * @param address - Visitor's address
+     * @param phoneNumber - Visitor's phone number
+     */
+    public Visitor registerUser(String firstName, String lastName, String address, String phoneNumber) {
+        Long userID = getUnusedVisitorID();
+        Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID, time);
+        visitors.put(userID, newVisitor);
+        return newVisitor;
+    }
+
+    private Long getUnusedVisitorID(){
+        Random r = new Random();
+        while (true){
+            long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;
+            if(!usedVisitorIds.contains(id)){
+                usedVisitorIds.add(id);
+                return id;
+            }
+        }
+    }
+
+    //BOOK RELATED METHODS
     /**
      * Read in books from catalogue
      * Only used in initializing the books field
@@ -222,43 +201,6 @@ public class BookwormLibrary {
         return books;
     }
 
-    /**
-     * Verifies that a new user is not already contained in the system.
-     * @param firstName - Visitor's first name
-     * @param lastName - Visitor's last name
-     * @param address - Visitor's address
-     * @param phoneNumber - Visitor's phone number
-     * @return True if the the user can register, false otherwise
-     */
-    public boolean verifyUser(String firstName, String lastName, String address, String phoneNumber) {
-        Visitor temp = new Visitor(firstName, lastName, address, phoneNumber, 1111111111L, time);
-        return !this.visitors.containsValue(temp);
-    }
-
-    /**
-     * Registers a new user and adds them to the library
-     * @param firstName - Visitor's first name
-     * @param lastName - Visitor's last name
-     * @param address - Visitor's address
-     * @param phoneNumber - Visitor's phone number
-     */
-    public Visitor registerUser(String firstName, String lastName, String address, String phoneNumber) {
-        Long userID = getUnusedVisitorID();
-        Visitor newVisitor = new Visitor(firstName, lastName, address, phoneNumber, userID, time);
-        visitors.put(userID, newVisitor);
-        return newVisitor;
-    }
-
-    private Long getUnusedVisitorID(){
-        Random r = new Random();
-        while (true){
-            long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;
-            if(!usedVisitorIds.contains(id)){
-                usedVisitorIds.add(id);
-                return id;
-            }
-        }
-    }
 
     /**
      * Checks out a book from the library
@@ -302,50 +244,6 @@ public class BookwormLibrary {
         return "invalid-visitor-id";
     }
 
-    /**
-     * Shuts down the system, storing all data in a txt file
-     */
-    public void shutdown(){
-
-        //End all on going visits
-        for(Visit v : this.currentVisits) {
-            v.endVisit();
-        }
-
-        //Clear all current visits now that they're ended.
-        currentVisits.clear();
-
-        //Convert all required data structures to JSON
-        Gson gson = new Gson();
-        String booksJSON = gson.toJson(this.books);
-        String visitorsJSON = gson.toJson(this.visitors);
-        String checkOutsJSON = gson.toJson(this.checkedOutBooks);
-        String dateTimeJSON = gson.toJson(this.time);
-
-        //Save all the data to their own files
-        saveData(BOOKS_FILE, booksJSON);
-        saveData(VISITORS_FILE, visitorsJSON);
-        saveData(CHECKOUTS_FILE, checkOutsJSON);
-        saveData(DATETIME_FILE, dateTimeJSON);
-    }
-
-    /**
-     * Saves the JSON representation of an object to a file for persistent system data.
-     * @param fileName - Name of the file to save to
-     * @param fileData - JSON representation of a data structure
-     */
-    private void saveData(String fileName, String fileData){
-        try{
-            PrintWriter writer = new PrintWriter("src/model/shutdownFiles/" + fileName, "UTF-8");
-            writer.println(fileData);
-            writer.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("Error: " + fileName + " could not be found.");
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Check in a book, when books are checked in their validated, checked-in, then return a fine if the any books are overdue.
@@ -418,6 +316,124 @@ public class BookwormLibrary {
         }
         return "";
     }
+
+
+    //TIME RELATED METHODS
+
+    public void advanceTimeDays(int amount){
+        time = time.plusDays(amount);
+    }
+
+    public void advanceTimeHours(int amount){
+        time = time.plusHours(amount);
+    }
+
+    private boolean loadDateTime(){
+        try {
+            Gson gson = new Gson();
+            time = gson.fromJson(DATETIME_FILE, LocalDateTime.class);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
+    //SHUTDOWN RELATED METHODS
+
+    /**
+     * Shuts down the system, storing all data in a txt file
+     */
+    public void shutdown(){
+
+        //End all on going visits
+        for(Visit v : this.currentVisits) {
+            v.endVisit();
+        }
+
+        //Clear all current visits now that they're ended.
+        currentVisits.clear();
+
+        //Convert all required data structures to JSON
+        Gson gson = new Gson();
+        String booksJSON = gson.toJson(this.books);
+        String visitorsJSON = gson.toJson(this.visitors);
+        String checkOutsJSON = gson.toJson(this.checkedOutBooks);
+        String dateTimeJSON = gson.toJson(this.time);
+
+        //Save all the data to their own files
+        saveData(BOOKS_FILE, booksJSON);
+        saveData(VISITORS_FILE, visitorsJSON);
+        saveData(CHECKOUTS_FILE, checkOutsJSON);
+        saveData(DATETIME_FILE, dateTimeJSON);
+    }
+
+    /**
+     * Saves the JSON representation of an object to a file for persistent system data.
+     * @param fileName - Name of the file to save to
+     * @param fileData - JSON representation of a data structure
+     */
+    private void saveData(String fileName, String fileData){
+        try{
+            PrintWriter writer = new PrintWriter("src/model/shutdownFiles/" + fileName, "UTF-8");
+            writer.println(fileData);
+            writer.close();
+        }catch (FileNotFoundException e) {
+            System.out.println("Error: " + fileName + " could not be found.");
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    //GETTERS
+
+    /**
+     * Retrieve the one and only instance of the model.BookwormLibrary.
+     * @return The instance of the model.BookwormLibrary
+     */
+    public static BookwormLibrary getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * Get all of the visitors that have visited the library
+     * @return Hasmap<VisitorId, Visitor>
+     */
+    public HashMap < Long, Visitor > getVisitors() {
+        return visitors;
+    }
+
+    /**
+     * Get the books that can be purchased from the catalogue
+     * @return ArrayList<BooK> of all the books that can be purchased
+     */
+    public ArrayList < Book > getCatalogue() {
+        return catalogue;
+    }
+
+    /**
+     * Get all the books the library currently owns
+     * @return ArrayList<Book> of all the books the library owns
+     */
+    public HashMap < String, Book > getBooks() {
+        return books;
+    }
+
+    /**
+     * Get the books each member has checked out
+     * @return HashMap<VisitorID, ArrayList<Checkout>> of all checked out books
+     */
+    public HashMap < Long, ArrayList < CheckOut >> getCheckedOutBooks() {
+        return checkedOutBooks;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
