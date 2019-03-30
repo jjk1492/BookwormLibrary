@@ -62,6 +62,7 @@ public class BookwormLibrary {
             }
             this.catalogue = this.readInBooks();
             this.currentVisits = new ArrayList < > ();
+
             try{
                 System.out.println("Loading previous data...");
                 Type bookType = new TypeToken<HashMap<String, Book>>(){}.getType();
@@ -100,11 +101,6 @@ public class BookwormLibrary {
                 this.checkedOutBooks = new HashMap<>();
                 System.out.println("No checkouts found.\n");
             }
-
-
-            this.books = new HashMap < > ();
-            this.visitors = new HashMap < > ();
-            this.checkedOutBooks = new HashMap < > ();
         }
     }
 
