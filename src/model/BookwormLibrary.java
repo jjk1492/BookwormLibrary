@@ -1,6 +1,8 @@
 package model;
 
 
+import com.google.gson.Gson;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +21,9 @@ public class BookwormLibrary {
 
     private static BookwormLibrary INSTANCE;
 
+    private final static String BOOKS_FILE = "savedBooks.json";
+    private final static String VISITORS_FILE = "savedVisitors.json";
+    private final static String CHECKOUTS_FILE = "savedCheckOuts.json";
     //ArrayList of purchasable books
     private ArrayList < Book > catalogue;
 
@@ -269,41 +274,41 @@ public class BookwormLibrary {
      * Shuts down the system, storing all data in a txt file
      */
     public void shutdown(){
-        //end visits
-        for (int i = 0; i < currentVisits.size(); i++) {
-            Visit v = currentVisits.get(i);
+
+        //End all on going visits
+        for(Visit v : this.currentVisits) {
             v.endVisit();
         }
-        //remove visits from arraylist
-        for (int j = 0; j < currentVisits.size(); j =0) {
-            currentVisits.remove(j);
-        }
-        //creates the writer for the text file
-        try (PrintWriter writer = new PrintWriter("data.txt", "UTF-8")) {
-            writer.println("VISITORS: \n");
-            //visitors
-            for (Visitor vis : visitors.values()) {
-                writer.println(vis.toString());
-            }
-            writer.println();
-            writer.println("Books: \n");
-            //books
-            for (Book b : books.values()) {
-                writer.println(b.toString());
-            }
-            writer.println();
-            writer.println("Checked out books: \n");
-            //checked out books
-            for (ArrayList<CheckOut> checkedOut : checkedOutBooks.values()) {
-                for (CheckOut ch : checkedOut) {
-                    writer.println(ch.getBook() + "checked out to: " + ch.getVisitorId());
-                }
-            }
-            //catches
-        } catch (FileNotFoundException e) {
-                e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+
+        //Clear all current visits now that they're ended.
+        currentVisits.clear();
+
+        //Convert all required data structures to JSON
+        Gson gson = new Gson();
+        String booksJSON = gson.toJson(this.books);
+        String visitorsJSON = gson.toJson(this.visitors);
+        String checkOutsJSON = gson.toJson(this.checkedOutBooks);
+
+        //Save all the data to their own files
+        saveData(BOOKS_FILE, booksJSON);
+        saveData(VISITORS_FILE, visitorsJSON);
+        saveData(CHECKOUTS_FILE, checkOutsJSON);
+    }
+
+    /**
+     * Saves the JSON representation of an object to a file for persistent system data.
+     * @param fileName - Name of the file to save to
+     * @param fileData - JSON representation of a data structure
+     */
+    private void saveData(String fileName, String fileData){
+        try{
+            PrintWriter writer = new PrintWriter("../shutdownFiles/" + fileName, "UTF-8");
+            writer.println(fileData);
+            writer.close();
+        }catch (FileNotFoundException e) {
+            System.out.println("Error: " + fileName + " could not be found.");
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
         }
     }
 
@@ -319,7 +324,7 @@ public class BookwormLibrary {
             String invalidIDs = "";
             for (String isbn: bookIDs) {
                 if (!books.containsKey(isbn)) {
-                    invalidIDs += (isbn + ",");
+                    invalidIDs = invalidIDs.concat(isbn + ",");
                 }
             }
             if (invalidIDs.length() > 0) {
@@ -331,7 +336,7 @@ public class BookwormLibrary {
             for (String isbn: bookIDs) {
                 for (CheckOut co: this.checkedOutBooks.get(visitorID)) {
                     if (co.isOverDue()) {
-                        overDue += (isbn + ",");
+                        overDue = overDue.concat(isbn + ",");
                         this.visitors.get(visitorID).addFine(co.getFine());
                     }
 
