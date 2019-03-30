@@ -1,7 +1,6 @@
 package controller.command.commands;
 
 import controller.command.Command;
-import model.CheckOut;
 
 /**
  * Find borrowed books from a user Command

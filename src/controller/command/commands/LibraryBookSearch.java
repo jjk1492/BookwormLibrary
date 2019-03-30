@@ -1,11 +1,6 @@
 package controller.command.commands;
 
 import controller.command.Command;
-import model.Book;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Search the library for a book Command

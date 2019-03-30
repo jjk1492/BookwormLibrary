@@ -29,7 +29,7 @@ public class CreateAccount implements Command {
     @Override
     public void execute() {
         if(correctArgCount){
-
+            System.out.println("");
         }else {
             System.out.println(clientID + ",create,unsuccessful;");
             System.out.print("Do you have the correct number of arguments?;");
