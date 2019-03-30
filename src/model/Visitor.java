@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -26,7 +25,7 @@ public class Visitor {
      * @param phoneNumber Visitor's phone number
      * @param userID Unique 10 digit ID
      */
-    public Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID) {
+    Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -69,7 +68,7 @@ public class Visitor {
     /**
      *
      * @param o - Object being compared to this Visitor
-     * @return
+     * @return true if is equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -84,9 +83,7 @@ public class Visitor {
 
     @Override
     public String toString(){
-        String str = this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber +
-                " " + this.userID;
-        return str;
+        return this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber + " " + this.userID;
     }
 
     /**
