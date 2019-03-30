@@ -39,8 +39,6 @@ public class BookwormLibrary {
     //HashMap key is the visitors uniqueID
     private HashMap < Long, Visitor > visitors;
 
-    private List<Long> usedVisitorIds;
-
     //HashMap key is the visitors uniqueID
     private HashMap < Long, ArrayList < CheckOut >> checkedOutBooks;
 
@@ -63,22 +61,9 @@ public class BookwormLibrary {
             this.catalogue = this.readInBooks();
             this.books = new HashMap < > ();
             this.visitors = new HashMap < > ();
-            this.usedVisitorIds = new ArrayList<>();
             this.checkedOutBooks = new HashMap < > ();
             this.currentVisits = new ArrayList < > ();
         }
-    }
-
-    /**
-     * Test constructor, allows pre-constructed Visitor and Book HashMaps
-     * @param books - HashMap for the books
-     * @param visitors - HashMap for the visitors
-     */
-    public BookwormLibrary(HashMap < String, Book > books, HashMap < Long, Visitor > visitors, HashMap < Long, ArrayList < CheckOut >> checkedOutBooks, ArrayList < Visit > currentVisits) {
-        this.books = books;
-        this.visitors = visitors;
-        this.checkedOutBooks = checkedOutBooks;
-        this.currentVisits = currentVisits;
     }
 
     //VISITOR RELATED METHODS
@@ -150,12 +135,12 @@ public class BookwormLibrary {
         Random r = new Random();
         while (true){
             long id = (long)(r.nextDouble() * 8999999999L) + 1000000000;
-            if(!usedVisitorIds.contains(id)){
-                usedVisitorIds.add(id);
+            if(!visitors.containsKey(id)){
                 return id;
             }
         }
     }
+
 
     //BOOK RELATED METHODS
     /**
