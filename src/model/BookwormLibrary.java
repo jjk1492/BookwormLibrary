@@ -9,7 +9,6 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -46,6 +45,8 @@ public class BookwormLibrary {
 
     private LocalDateTime time;
 
+    private ArrayList<Book> catalogue;
+
     /**
      * Lazy constructor
      *
@@ -55,6 +56,7 @@ public class BookwormLibrary {
         if(INSTANCE == null) {
             INSTANCE = this;
             this.currentVisits = new ArrayList < > ();
+            this.catalogue = BookStore.getInstance().loadLocal();
 
             //Try and read in previous books, if none are found create a new HashMap
             try{
@@ -199,6 +201,10 @@ public class BookwormLibrary {
 
     //BOOK RELATED METHODS
 
+    public void setCatalogue(ArrayList<Book> newCatalogue){
+        this.catalogue = newCatalogue;
+    }
+
     /**
      * Checks out a book from the library
      * @param visitorID - Visitor requesting a book check out
@@ -293,8 +299,23 @@ public class BookwormLibrary {
      * @param quantity number to purchase
      * @return string of error or success
      */
-    public String buyBook(String isbn, int quantity) {
-        return "";
+    public boolean buyBook(String isbn, int quantity) {
+        boolean successful = false;
+
+        for( Book book : this.catalogue){
+            if( book.getISBN().equals(isbn) ){
+                if( this.books.containsKey(isbn) ){
+                    this.books.get(isbn).addCopies(quantity);
+                }else {
+                    Book toPurchase = new Book(book.getISBN(), book.getTitle(), book.getAuthors(), book.getPublisher(), book.getPublishDate(), book.getPageCount());
+                    toPurchase.addCopies(quantity);
+                    this.books.put(isbn, toPurchase);
+                }
+                successful = true;
+            }
+        }
+
+        return successful;
     }
 
 
