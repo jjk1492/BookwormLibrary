@@ -29,7 +29,7 @@ public class LogIn implements Command {
         if(correct){
             for(Visitor v : BookwormLibrary.getInstance().getVisitors().values()){
                 if(v.getUsername().equals(username) && v.checkPassword(password)){
-                    QueryHandler.getLoggedInUsers().put(v.getUserID(), v);
+                    QueryHandler.getActiveClients().get(clientID).setVisitor(v);
                     System.out.println(clientID + ",login,success;");
                     return;
                 }

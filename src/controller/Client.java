@@ -1,6 +1,7 @@
 package controller;
 
 import controller.command.*;
+import model.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ public class Client {
     private Invoker invoker;
     private Long clientID;
     private String service;
+
+    private Visitor visitor;
 
     private static List<Long> usedClientIDs;
 
@@ -68,5 +71,13 @@ public class Client {
 
     public void setService(String service) {
         this.service = service;
+    }
+
+    public Visitor getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(Visitor visitor) {
+        this.visitor = visitor;
     }
 }

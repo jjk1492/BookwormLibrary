@@ -1,1 +1,1 @@
-{"3711936877":{"firstName":"John","lastName":"Knecht","address":"123Drive","phoneNumber":"555-5555","userID":3711936877,"timeOfCreation":{"date":{"year":2019,"month":3,"day":30},"time":{"hour":18,"minute":14,"second":14,"nano":350207000}},"fine":0.0}}
+{"7288566600":{"firstName":"Christian","lastName":"Alvarez","address":"123Street","phoneNumber":"123-123-1234","userID":7288566600,"timeOfCreation":{"date":{"year":2019,"month":4,"day":2},"time":{"hour":18,"minute":30,"second":41,"nano":615366200}},"username":"Flewander","password":"password","isEmployee":true,"fine":0.0}}
