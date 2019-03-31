@@ -1,6 +1,11 @@
 package model;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 /**
@@ -10,9 +15,9 @@ import java.util.Date;
  */
 public class Visit {
 
-    private Date date = new Date();
-    private long startTime = System.currentTimeMillis();
-    private long endTime;
+    private LocalDateTime date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     private Long visitorId;
 
@@ -20,8 +25,10 @@ public class Visit {
      * Constructor for a visit, endTime is initially set to -1 indicating it hasn't ended yet.
      * @param visitor - Who visited the library
      */
-    public Visit(Visitor visitor) {
+    public Visit(Visitor visitor, LocalDateTime time) {
         this.visitorId = visitor.getUserID();
+        this.date = time;
+        startTime = date.toLocalTime();
     }
 
     /**
@@ -29,23 +36,26 @@ public class Visit {
      * @return Date visit started
      */
     public String getStartDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 
     /**
      * milliseconds representation of when the visit began
      * @return
      */
-    public long getStartTime(){
-        return this.startTime;
+    public String getStartTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return startTime.format(formatter);
     }
 
     /**
      * milliseconds representation of when the visit ended
      * @return
      */
-    public long getEndTime() {
-        return this.endTime;
+    public String getEndTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return endTime.format(formatter);
     }
 
     /**
@@ -59,25 +69,17 @@ public class Visit {
     /**
      * End the visit
      */
-    public void endVisit() {
-        this.endTime = System.currentTimeMillis();
+    public void endVisit(LocalDateTime time) {
+        this.endTime = time.toLocalTime();
     }
 
     /**
      * Find how long someone was in the library
      * @return Int representation of minutes spent in library
      */
-    public int getVisitTimeMinutes() {
-        if (endTime == 0L) return (int)((System.currentTimeMillis() - startTime) / 1000) / 60;
-
-        return (int)((endTime - startTime) / 1000) / 60;
-    }
-
-    /**
-     * Provides the necessary endtime to end a visit
-     * @param endTime the time the visit ends
-     */
-    public void endVisit(long endTime){
-        this.endTime = endTime;
+    public String getVisitTimeMinutes() {
+        Duration duration = Duration.between(startTime, endTime);
+        LocalTime t = LocalTime.MIDNIGHT.plus(duration);
+        return DateTimeFormatter.ofPattern("HH:mm:ss").format(t);
     }
 }

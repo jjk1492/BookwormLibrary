@@ -17,13 +17,15 @@ public class Invoker {
      */
     private Stack<UndoableCommand> redoStack;
 
+    private Long clientID;
     /**
      * Constructor for the Invoker
      * Creates new undo/redo stacks
      */
-    public Invoker(){
+    public Invoker(Long clientID){
         undoStack = new Stack<>();
         redoStack = new Stack<>();
+        this.clientID = clientID;
     }
 
     /**
@@ -46,6 +48,8 @@ public class Invoker {
             UndoableCommand cm = undoStack.pop();
             cm.undo();
             redoStack.push(cm);
+        }else {
+            System.out.println(clientID + ",undo,cannot-undo;");
         }
     }
 
@@ -54,9 +58,13 @@ public class Invoker {
      * Redos the recent command from the stack
      */
     public void redo(){
-        UndoableCommand cm = redoStack.pop();
-        cm.execute();
-        undoStack.push(cm);
+        if(!redoStack.empty()) {
+            UndoableCommand cm = redoStack.pop();
+            cm.execute();
+            undoStack.push(cm);
+        }else{
+            System.out.println(clientID + ",redo,cannot-redo;");
+        }
     }
 
     /**

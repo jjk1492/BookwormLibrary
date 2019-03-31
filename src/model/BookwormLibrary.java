@@ -122,24 +122,21 @@ public class BookwormLibrary {
 
     //VISITOR RELATED METHODS
 
+
+    public ArrayList<Visit> getCurrentVisits() {
+        return currentVisits;
+    }
+
     /**
      * Add a visitor to currently visiting
      * @param visitorID Visitor
      * @return string of error or success
      */
-    public String addToVisits(Long visitorID) {
+    public Visit addToVisits(Long visitorID) {
         Visitor v = this.visitors.get(visitorID);
-        if (v == null) {
-            return "invalid-id";
-        }
-        for (Visit vis: this.currentVisits) {
-            if (visitorID.equals(vis.getVisitorId())) {
-                return "arrive,duplicate";
-            }
-        }
-        Visit visit = new Visit(v);
+        Visit visit = new Visit(v, time);
         this.currentVisits.add(visit);
-        return "arrive," + visitorID + "," + visit.getStartDate() + "," + visit.getStartTime();
+        return visit;
     }
 
     /**
@@ -147,15 +144,15 @@ public class BookwormLibrary {
      * @param visitorID Visitor
      * @return string of error or success
      */
-    public String removeFromVisits(Long visitorID) {
+    public Visit removeFromVisits(Long visitorID) {
         for (Visit vis: this.currentVisits) {
             if (visitorID.equals(vis.getVisitorId())) {
-                vis.endVisit();
+                vis.endVisit(time);
                 this.currentVisits.remove(vis);
-                return "depart," + vis.getVisitorId() + "," + vis.getEndTime() + "," + vis.getVisitTimeMinutes();
+                return vis;
             }
         }
-        return "invalid-id";
+        return null;
     }
 
     /**
@@ -320,7 +317,7 @@ public class BookwormLibrary {
 
         //End all on going visits
         for(Visit v : this.currentVisits) {
-            v.endVisit();
+            v.endVisit(time);
         }
 
         //Clear all current visits now that they're ended.

@@ -74,11 +74,11 @@ public class QueryHandler {
                 return true;
             case "arrive":                                          //Client wants to begin a visit to the library
                 ucm = new BeginVisit(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "borrow":                                          //Client wants to borrow a book
                 ucm = new BorrowBook(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "borrowed":                                        //Client wants to find a book that is borrowed
                 cm = new FindBorrowBook(args);
@@ -86,7 +86,7 @@ public class QueryHandler {
                 return true;
             case "buy":                                             //Client wants to buy a book from the service
                 ucm = new PurchaseBook(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "create":                                          //Client wants to create a new account
                 cm = new CreateAccount(args);
@@ -98,7 +98,7 @@ public class QueryHandler {
                 return true;
             case "depart":                                          //Client wants to end a visit to the library
                 ucm = new EndVisit(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "disconnect":                                      //disconnect the client based of client id
                 System.out.println(activeClient.getClientID() + ",disconnect;");
@@ -116,12 +116,12 @@ public class QueryHandler {
                 cm.execute();
                 return true;
             case "logout":                                          //Client wants to logout of account
-                cm = new LogOut();
+                cm = new LogOut(args);
                 cm.execute();
                 return true;
             case "pay":                                             //Client wants to pay there outstanding fines
                 ucm = new PayFine(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "redo":                                            //Client wants to redo most recent undone command
                 activeClient.redo();
@@ -136,7 +136,7 @@ public class QueryHandler {
                 return true;
             case "return":                                          //Client wants to return a book
                 ucm = new ReturnBook(args);
-                ucm.execute();
+                activeClient.execute(ucm);
                 return true;
             case "search":                                          //Client wants to search the book store
                 cm = new BookStoreSearch(args);

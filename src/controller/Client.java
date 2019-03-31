@@ -25,6 +25,7 @@ public class Client {
             usedClientIDs = new ArrayList<>();
         }
         clientID = getUnusedClientID();
+        invoker = new Invoker(clientID);
     }
 
     public Long getClientID(){
