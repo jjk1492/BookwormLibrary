@@ -32,9 +32,6 @@ public class BookwormLibrary {
 
     private final static Gson gson = new Gson();
 
-    //ArrayList of purchasable books
-    private ArrayList < Book > catalogue;
-
     //HashMap key is the ISBN of the book
     private HashMap < String, Book > books;
 
@@ -60,9 +57,9 @@ public class BookwormLibrary {
             if(!loadDateTime()){
                 time = LocalDateTime.now();
             }
-            this.catalogue = this.readInBooks();
             this.currentVisits = new ArrayList < > ();
 
+            //Try and read in previous books, if none are found create a new HashMap
             try{
                 System.out.println("Loading previous data...");
                 Type bookType = new TypeToken<HashMap<String, Book>>(){}.getType();
@@ -76,8 +73,8 @@ public class BookwormLibrary {
                 System.out.println("No books found.");
             }
 
+            //Try and read in previous visitors, if none are found create a new HashMap
             try{
-
                 Type visitorType = new TypeToken<HashMap<Long, Visitor>>(){}.getType();
                 JsonReader reader = new JsonReader( new FileReader(FILE_PATH + VISITORS_FILE));
                 this.visitors = gson.fromJson(reader, visitorType);
@@ -89,8 +86,8 @@ public class BookwormLibrary {
                 System.out.println("No visitors found.");
             }
 
+            //Try and read in previous CheckOuts, if none are found create a new HashMap
             try{
-
                 Type checkoutType = new TypeToken<HashMap<Long, ArrayList<CheckOut>>>(){}.getType();
                 JsonReader reader = new JsonReader(new FileReader(FILE_PATH + CHECKOUTS_FILE));
                 this.checkedOutBooks = gson.fromJson(reader, checkoutType);
@@ -103,6 +100,7 @@ public class BookwormLibrary {
             }
         }
     }
+
 
     //VISITOR RELATED METHODS
 
@@ -169,6 +167,10 @@ public class BookwormLibrary {
         return newVisitor;
     }
 
+    /**
+     * Generates a unique visitorID
+     * @return A unique visitorID as a long
+     */
     private Long getUnusedVisitorID(){
         Random r = new Random();
         while (true){
@@ -181,49 +183,6 @@ public class BookwormLibrary {
 
 
     //BOOK RELATED METHODS
-    /**
-     * Read in books from catalogue
-     * Only used in initializing the books field
-     * @return ArrayList<Book> of all books in the catalogue
-     */
-    private ArrayList < Book > readInBooks() {
-        ArrayList < Book > books = new ArrayList < > ();
-        try {
-            Scanner scanner = new Scanner(new File("./src/books.txt"));
-
-            while (scanner.hasNextLine()) {
-                ArrayList < String > vals = new ArrayList < > ();
-                StringBuilder builder = new StringBuilder();
-
-                boolean inSpecial = false;
-                for (char c: scanner.nextLine().toCharArray()) {
-                    if (c == '"' || c == '{' || c == '}') {
-                        inSpecial = !inSpecial;
-                    } else if (c == ',' && !inSpecial) {
-                        vals.add(builder.toString());
-                        builder = new StringBuilder();
-                    } else {
-                        builder.append(c);
-                    }
-                }
-
-                vals.add(builder.toString());
-
-                if (vals.get(4).length() == 4) {
-                    vals.set(4, vals.get(4) + "-01-01");
-                } else if (vals.get(4).length() == 7) {
-                    vals.set(4, vals.get(4) + "-01");
-                }
-
-                books.add(new Book(vals.get(0), vals.get(1), new ArrayList < > (Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
-
 
     /**
      * Checks out a book from the library
@@ -320,23 +279,6 @@ public class BookwormLibrary {
      * @return string of error or success
      */
     public String buyBook(String isbn, int quantity) {
-        if (books.containsKey(isbn)) {
-            books.get(isbn).addCopies(quantity);
-            return books.get(isbn).toString();
-        } else {
-            for (Book b: catalogue) {
-                if (b.getISBN().equals(isbn)) {
-                    try {
-                        Book b1 = new Book(b.getISBN(), b.getTitle(), b.getAuthors(), b.getPublisher(), new SimpleDateFormat("yyyy-MM-dd").parse(b.getPublishDate()), b.getPageCount());
-                        b1.addCopies(quantity);
-                        books.put(isbn, b1);
-                        return b1.getISBN() + "," + b1.getTitle() + "," + String.join(",", b1.getAuthors()) + "," + new SimpleDateFormat("yyyy-MM-dd").format(b1.getPublishDate()) + "," + b1.getNumberOfCopies();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
         return "";
     }
 
@@ -415,14 +357,6 @@ public class BookwormLibrary {
      */
     public HashMap < Long, Visitor > getVisitors() {
         return visitors;
-    }
-
-    /**
-     * Get the books that can be purchased from the catalogue
-     * @return ArrayList<BooK> of all the books that can be purchased
-     */
-    public ArrayList < Book > getCatalogue() {
-        return catalogue;
     }
 
     /**

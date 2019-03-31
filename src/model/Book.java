@@ -1,5 +1,8 @@
 package model;
 
+import model.bookSearch.Queryable;
+import model.bookSearch.Query;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +12,7 @@ import java.util.Date;
  *
  * @author John Knecht V (jjk1492@rit.edu)
  */
-public class Book {
+public class Book implements Queryable {
 
     //Required book data
     private String title;
@@ -129,5 +132,10 @@ public class Book {
      */
     public void addCopies(int amount) {
         this.numberOfCopies += amount;
+    }
+
+    @Override
+    public void doQuery(Query q) {
+        q.query(this);
     }
 }

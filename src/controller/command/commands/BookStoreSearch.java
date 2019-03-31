@@ -1,77 +1,64 @@
 package controller.command.commands;
 
 import controller.command.Command;
+import model.Book;
+import model.BookStore;
+
+import java.util.ArrayList;
 
 /**
  * Search the book Store
  */
 public class BookStoreSearch implements Command {
 
+    String[] commandArgs;
 
-    public BookStoreSearch(String[] args) {
+    public BookStoreSearch(String[] commandArgs) {
+        this.commandArgs = commandArgs;
     }
 
     @Override
     public void execute() {
 
+        ArrayList<Book> matchingBooks;
+        String bookTitle = this.commandArgs[2];
+        String authorsString = "*";
+        String isbn = "*";
+        String publisher = "*";
+        String sortOrder = "*";
+
+        try{
+            int i = 3;
+            authorsString = this.commandArgs[i++].replace("{", "") + ",";
+            while( !authorsString.endsWith("}") ){
+                authorsString = authorsString.concat(this.commandArgs[i++] + ",");
+            }
+            isbn = this.commandArgs[i++];
+            publisher = this.commandArgs[i++];
+            sortOrder = this.commandArgs[i];
+        }catch (ArrayIndexOutOfBoundsException e){
+
+        }
+
+        authorsString = authorsString.replace("},","");
+        authorsString = authorsString.replace("}","");
+
+        BookStore bookStore = BookStore.getInstance();
+
+        String[] authorsArray = authorsString.split(",");
+        ArrayList<String> authors = new ArrayList<>();
+        for( String author: authorsArray){
+            authors.add(author);
+        }
+
+        matchingBooks = bookStore.titleSearch(bookTitle, new ArrayList<>());
+        matchingBooks = bookStore.authorSearch(authors, matchingBooks);
+        matchingBooks = bookStore.publisherSearch(publisher, matchingBooks);
+        matchingBooks = bookStore.isbnSearch(isbn, matchingBooks);
+
+        for(Book book: matchingBooks){
+            System.out.println("Found book: " + book.getTitle() + " by the author: " + book.getAuthors());
+        }
     }
-
-    /*@Override
-    public String runCommand(String[] args) {
-        String title = args[1];
-        ArrayList < String > authors = new ArrayList < > ();
-        int offset = 0;
-        for (int i = 2; i < args.length - 1; i++) {
-            if (args[i].contains("{") && args[i].contains("}")) {
-                String s = args[i].replace("{", "").replace("}", "");
-                authors.add(s);
-                i = Integer.MAX_VALUE;
-            } else if (args[i].contains("{")) {
-                String s = args[i].replace("{", "");
-                authors.add(s);
-            } else if (args[i].contains("}")) {
-                String s = args[i].replace("}", "");
-                authors.add(s);
-                i = Integer.MAX_VALUE;
-            } else {
-                authors.add(args[i]);
-            }
-            offset++;
-        }
-        String isbn = args[2 + offset];
-        String publisher = args[3 + offset];
-        String sortOrder = args[4 + offset];
-
-        ArrayList < Book > books = new ArrayList < > ();
-
-        for (Book b: library.getCatalogue()) {
-            if (b.getTitle().equals(title) ||
-                    b.getAuthors().equals(authors) ||
-                    b.getISBN().equals(isbn) ||
-                    b.getPublisher().equals(publisher)) {
-                books.add(b);
-            }
-        }
-
-        if (sortOrder.equals("title")) {
-            Collections.sort(books, new Comparator < Book > () {
-                @Override
-                public int compare(Book o1, Book o2) {
-                    return o1.getTitle().compareTo(o2.getTitle());
-                }
-            });
-        } else if (sortOrder.equals("publish-date")) {
-            Collections.sort(books, new Comparator < Book > () {
-                @Override
-                public int compare(Book o1, Book o2) {
-                    return o1.getPublishDate().compareTo(o2.getPublishDate());
-                }
-            });
-        } else {
-            return "info,invalid-sort-order;";
-        }
-
-        return "";
-    }*/
 
 }

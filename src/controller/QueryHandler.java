@@ -20,9 +20,8 @@ public class QueryHandler {
         return activeClients;
     }
 
-    public boolean handleQuery(String query){
-        String s1 = query.replaceAll("\\s", "");    //remove spaces from input
-        String[] args = s1.split(",");                         //split the string on commas
+    public boolean handleQuery(String query){    //remove spaces from input
+        String[] args = query.split(",");                         //split the string on commas
 
         //Check to ensure the command ends with a ';'
         if (!args[args.length - 1].endsWith(";")) {
@@ -106,7 +105,8 @@ public class QueryHandler {
                 Client.removeClientID(activeClient.getClientID());
                 activeClient.dispose();
                 return true;
-            case "info":                                            //Client wants to search for a book in the library
+            case "info":
+                //Client wants to search for a book in the library
                 cm = new LibraryBookSearch(args);
                 cm.execute();
                 return true;

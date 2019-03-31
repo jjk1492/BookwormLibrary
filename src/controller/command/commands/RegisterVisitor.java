@@ -32,7 +32,6 @@ public class RegisterVisitor implements Command {
         }
     }
 
-    //TODO: fix the registration date so it actually prints out a date
     @Override
     public void execute() {
         if(correctArgCount){
@@ -47,13 +46,4 @@ public class RegisterVisitor implements Command {
             System.out.println("Did you input the correct number of arguments?;");
         }
     }
-
-    /*@Override
-    public String runCommand(String[] args) {
-        if (args.length == 5) {
-            return "register," + library.registerUser(args[1], args[2], args[3], args[4]) + ";";
-        } else {
-            return "register,missing-parameters,{first name,last name,address, phone-number};";
-        }
-    }*/
 }
