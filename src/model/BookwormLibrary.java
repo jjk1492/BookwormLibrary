@@ -54,9 +54,6 @@ public class BookwormLibrary {
     public BookwormLibrary() {
         if(INSTANCE == null) {
             INSTANCE = this;
-            if(!loadDateTime()){
-                time = LocalDateTime.now();
-            }
             this.currentVisits = new ArrayList < > ();
 
             //Try and read in previous books, if none are found create a new HashMap
@@ -67,10 +64,12 @@ public class BookwormLibrary {
                 this.books = gson.fromJson(reader, bookType);
                 reader.close();
                 System.out.println("Books loaded.");
-
             }catch (Exception e){
                 this.books = new HashMap<>();
                 System.out.println("No books found.");
+            }
+            if(this.books == null){
+                this.books = new HashMap<>();
             }
 
             //Try and read in previous visitors, if none are found create a new HashMap
@@ -80,10 +79,12 @@ public class BookwormLibrary {
                 this.visitors = gson.fromJson(reader, visitorType);
                 reader.close();
                 System.out.println("Visitors loaded.");
-
             }catch (Exception e){
                 this.visitors = new HashMap<>();
                 System.out.println("No visitors found.");
+            }
+            if(this.visitors == null){
+                this.visitors = new HashMap<>();
             }
 
             //Try and read in previous CheckOuts, if none are found create a new HashMap
@@ -92,11 +93,28 @@ public class BookwormLibrary {
                 JsonReader reader = new JsonReader(new FileReader(FILE_PATH + CHECKOUTS_FILE));
                 this.checkedOutBooks = gson.fromJson(reader, checkoutType);
                 reader.close();
-                System.out.println("Checkouts loaded.\n");
+                System.out.println("Checkouts loaded.");
 
             }catch (Exception e){
                 this.checkedOutBooks = new HashMap<>();
-                System.out.println("No checkouts found.\n");
+                System.out.println("No checkouts found.");
+            }
+            if(this.checkedOutBooks == null){
+                this.checkedOutBooks = new HashMap<>();
+            }
+
+            try{
+                Type dateTimeType = new TypeToken<LocalDateTime>(){}.getType();
+                JsonReader reader = new JsonReader(new FileReader(FILE_PATH + DATETIME_FILE));
+                this.time = gson.fromJson(reader, dateTimeType);
+                reader.close();
+                System.out.println("Time loaded.\n");
+            }catch (Exception e){
+                time = LocalDateTime.now();
+                System.out.println("No saved time found, resetting time.\n");
+            }
+            if(this.time == null){
+                time = LocalDateTime.now();
             }
         }
     }
@@ -293,17 +311,6 @@ public class BookwormLibrary {
         time = time.plusHours(amount);
     }
 
-    private boolean loadDateTime(){
-        try {
-            Gson gson = new Gson();
-            time = gson.fromJson(DATETIME_FILE, LocalDateTime.class);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
-
     //SHUTDOWN RELATED METHODS
 
     /**
@@ -335,6 +342,9 @@ public class BookwormLibrary {
             gsonBuilder.toJson(this.checkedOutBooks, writer);
             writer.close();
 
+            writer = new PrintWriter(FILE_PATH + DATETIME_FILE, "UTF-8");
+            gsonBuilder.toJson(this.time, writer);
+            writer.close();
         }catch (Exception e){
             e.printStackTrace();
         }

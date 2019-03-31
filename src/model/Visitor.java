@@ -18,6 +18,11 @@ public class Visitor {
     private Long userID;
     private LocalDateTime timeOfCreation;
 
+    //Account information
+    private String username;
+    private String password;
+    private boolean isEmployee;
+
     private double fine = 0.0;
     /**
      * Constructor for a visitor, contains name, contact info, and an ID number.
@@ -70,6 +75,24 @@ public class Visitor {
      */
     public void addFine(double amount) {
         this.fine += amount;
+    }
+
+    public boolean hasAccount(){
+        return username != null;
+    }
+
+    public void updateAccount(String username, String password, boolean isEmployee){
+        this.username = username;
+        this.password = password;
+        this.isEmployee = isEmployee;
+    }
+
+    public boolean checkPassword(String password){
+        return this.password.equals(password);
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     /**

@@ -4,6 +4,7 @@ import controller.command.Command;
 import controller.command.UndoableCommand;
 import controller.command.commands.*;
 import controller.command.undoableCommands.*;
+import model.Visitor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,19 @@ import java.util.Map;
 public class QueryHandler {
 
     private static Map<Long, Client> activeClients; //
+    private static Map<Long, Visitor> loggedInUsers;
 
     QueryHandler(){
         activeClients = new HashMap<>();
+        loggedInUsers = new HashMap<>();
     }
 
     public static Map<Long, Client> getActiveClients() {
         return activeClients;
+    }
+
+    public static Map<Long, Visitor> getLoggedInUsers() {
+        return loggedInUsers;
     }
 
     public boolean handleQuery(String query){    //remove spaces from input

@@ -32,7 +32,7 @@ public class AdvanceTime implements Command {
                 correct = false;
             }
             if(args[3].matches("[0-9]+")){              //check to ensure days is a number
-                days = Integer.parseInt(args[2]);           //Set days to args[2]
+                hours = Integer.parseInt(args[2]);           //Set days to args[2]
             }else{
                 System.out.println(clientID + ",advance,invalid-number-of-hours," + args[3] + ";");      //out put error message
                 correct = false;
