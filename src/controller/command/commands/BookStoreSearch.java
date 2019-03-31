@@ -5,6 +5,7 @@ import model.Book;
 import model.BookStore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Search the book Store
@@ -46,10 +47,7 @@ public class BookStoreSearch implements Command {
         BookStore bookStore = BookStore.getInstance();
 
         String[] authorsArray = authorsString.split(",");
-        ArrayList<String> authors = new ArrayList<>();
-        for( String author: authorsArray){
-            authors.add(author);
-        }
+        ArrayList<String> authors = new ArrayList<>(Arrays.asList(authorsArray));
 
         matchingBooks = bookStore.titleSearch(bookTitle, new ArrayList<>());
         matchingBooks = bookStore.authorSearch(authors, matchingBooks);
