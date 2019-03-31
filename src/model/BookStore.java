@@ -16,13 +16,13 @@ public class BookStore {
     public BookStore(){
         if(INSTANCE == null) {
             INSTANCE = this;
-            this.catalogue = loadBooks();
+            this.catalogue = loadLocal();
         }
     }
 
-    private ArrayList<Book> loadBooks(){
+    public ArrayList<Book> loadLocal(){
 
-        ArrayList < Book > books = new ArrayList < > ();
+        ArrayList < Book > localBooks = new ArrayList < > ();
 
         //Load in the supplied books from the books.txt files
         try {
@@ -52,7 +52,7 @@ public class BookStore {
                     vals.set(4, vals.get(4) + "-01");
                 }
 
-                books.add(new Book(vals.get(0), vals.get(1), new ArrayList < > (Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
+                localBooks.add(new Book(vals.get(0), vals.get(1), new ArrayList < > (Arrays.asList(vals.get(2).split(","))), vals.get(3), new SimpleDateFormat("yyyy-MM-dd").parse(vals.get(4)), Integer.parseInt(vals.get(5))));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +60,16 @@ public class BookStore {
 
         //TO DO: Load in books form the Google Books API
 
-        return books;
+        return localBooks;
+    }
+
+    public ArrayList<Book> loadAPI(){
+        ArrayList<Book> apiBooks = new ArrayList<>();
+
+        //TO DO: Make an HTTP request to google books api and add the books that are for sale in the us
+
+        return apiBooks;
+
     }
 
     public ArrayList<Book> titleSearch(String title, ArrayList<Book> toFilter){
