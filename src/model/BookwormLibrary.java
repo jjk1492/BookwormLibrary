@@ -198,6 +198,10 @@ public class BookwormLibrary {
         }
     }
 
+    public boolean hasVisitor(Long visitorID){
+        return this.visitors.containsKey(visitorID);
+    }
+
 
     //BOOK RELATED METHODS
 
@@ -316,6 +320,16 @@ public class BookwormLibrary {
         }
 
         return successful;
+    }
+
+    public ArrayList<CheckOut> getVisitorCheckOuts(Long visitorID){
+        ArrayList<CheckOut> visitorsCheckouts = new ArrayList<>();
+
+        if (this.checkedOutBooks.containsKey(visitorID)) {
+            visitorsCheckouts = this.checkedOutBooks.get(visitorID);
+        }
+
+        return visitorsCheckouts;
     }
 
 
