@@ -322,6 +322,10 @@ public class BookwormLibrary {
         return successful;
     }
 
+    public void removeBook(String isbn, int quantity){
+        this.books.get(isbn).removeQuantities(quantity);
+    }
+
     public ArrayList<CheckOut> getVisitorCheckOuts(Long visitorID){
         ArrayList<CheckOut> visitorsCheckouts = new ArrayList<>();
 

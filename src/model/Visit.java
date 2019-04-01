@@ -1,12 +1,9 @@
 package model;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
-import java.util.Date;
 
 /**
  * Represents a visit, one is created each time a visitor enters the library. Tracks the time of the visit, the date, and who visited.

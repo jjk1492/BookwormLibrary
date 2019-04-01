@@ -130,6 +130,23 @@ public class Book implements Queryable {
         }
     }
 
+    public void removeQuantities(int amount){
+        this.numberOfCopies -= amount;
+    }
+
+    public String getAuthorsPretty(){
+        String prettyAuthors = "{";
+        for( int i=0; i<this.authors.size(); i++){
+            prettyAuthors = prettyAuthors.concat(this.authors.get(i));
+            if( i == this.authors.size() -1 ){
+                prettyAuthors = prettyAuthors.concat("}");
+            }else {
+                prettyAuthors = prettyAuthors.concat(",");
+            }
+        }
+        return prettyAuthors;
+    }
+
     /**
      * Add to the number of copies that the library has of this book
      * @param amount number of copies
