@@ -10,8 +10,8 @@ public class BookPurchase implements Command {
 
     private String[] commandArgs;
 
-    public BookPurchase(String[] commandargs) {
-        this.commandArgs = commandargs;
+    public BookPurchase(String[] commandArgs) {
+        this.commandArgs = commandArgs;
     }
 
     @Override
