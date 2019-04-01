@@ -421,6 +421,10 @@ public class BookwormLibrary {
         return time;
     }
 
+    public Visitor getVisitor(Long visitorID){
+        return this.visitors.get((visitorID));
+    }
+
 
 
     @Override

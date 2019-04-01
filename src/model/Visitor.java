@@ -57,8 +57,15 @@ public class Visitor {
      * Pay user fine in amount
      * @param amount amount to pay
      */
-    public void payFine(double amount) {
-        fine -= amount;
+    public boolean payFine(double amount) {
+        boolean successful = false;
+
+        if( fine - amount >= 0){
+            fine -= amount;
+            successful = true;
+        }
+
+        return successful;
     }
 
     /**
