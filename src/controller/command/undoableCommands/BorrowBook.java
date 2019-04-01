@@ -1,7 +1,7 @@
 package controller.command.undoableCommands;
 
 import controller.command.Command;
-import controller.command.Undoable;
+import controller.command.UndoableCommand;
 import model.BookwormLibrary;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Borrow a book Command class
  */
-public class BorrowBook implements Undoable, Command {
+public class BorrowBook implements UndoableCommand {
 
     private Long clientID;
     private Long visitorID;

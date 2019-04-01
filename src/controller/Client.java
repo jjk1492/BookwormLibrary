@@ -43,7 +43,7 @@ public class Client {
         }
     }
 
-    public void execute(Undoable cm){
+    public void execute(UndoableCommand cm){
         invoker.execute(cm);
     }
 

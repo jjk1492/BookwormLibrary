@@ -1,14 +1,14 @@
 package controller.command.undoableCommands;
 
 import controller.command.Command;
-import controller.command.Undoable;
+import controller.command.UndoableCommand;
 import model.BookwormLibrary;
 import model.Visitor;
 
 /**
  * Pay a user's fine Command
  */
-public class PayFine implements Undoable, Command {
+public class PayFine implements UndoableCommand {
 
     private double finePayment;
     private Visitor visitor;

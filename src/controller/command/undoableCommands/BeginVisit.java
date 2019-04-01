@@ -1,7 +1,7 @@
 package controller.command.undoableCommands;
 
 import controller.command.Command;
-import controller.command.Undoable;
+import controller.command.UndoableCommand;
 import model.BookwormLibrary;
 import model.Visit;
 import model.Visitor;
@@ -9,7 +9,7 @@ import model.Visitor;
 /**
  * Begin visit Command
  */
-public class BeginVisit implements Undoable, Command {
+public class BeginVisit implements UndoableCommand {
 
     private Long clientID;
     private Long visitorID;

@@ -1,7 +1,7 @@
 package controller;
 
 import controller.command.Command;
-import controller.command.Undoable;
+import controller.command.UndoableCommand;
 import controller.command.commands.*;
 import controller.command.undoableCommands.*;
 
@@ -65,7 +65,7 @@ public class QueryHandler {
 
         //Switch on the first item in args which should be the command
         Command cm;
-        Undoable ucm;
+        UndoableCommand ucm;
         switch (args[1]){
             case "advance":                                         //Client wants to advance the time
                 cm = new AdvanceTime(args);

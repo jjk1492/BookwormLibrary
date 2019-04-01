@@ -3,8 +3,13 @@ package controller.command;
 /**
  * Simple interface the undoable commands interface
  */
-public interface Undoable {
+public interface UndoableCommand {
 
+    /**
+     * Execute part of the Command
+     * Handles when the user calls a Command from the Command line
+     */
+    public void execute();
 
     /**
      * Undo part of the Command

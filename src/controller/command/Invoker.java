@@ -10,12 +10,12 @@ public class Invoker {
     /**
      * The undo stack that handles the controller.command to undo
      */
-    private Stack<Undoable> undoStack;
+    private Stack<UndoableCommand> undoStack;
 
     /**
      * The redo stack that handles the controller.command to redo
      */
-    private Stack<Undoable> redoStack;
+    private Stack<UndoableCommand> redoStack;
 
     private Long clientID;
     /**
@@ -33,7 +33,7 @@ public class Invoker {
      * Called from the class that creates the command
      * @param cm - the command that is being executed
      */
-    public void execute(Undoable cm){
+    public void execute(UndoableCommand cm){
         undoStack.push(cm);
         redoStack.clear();
         cm.execute();
@@ -45,7 +45,7 @@ public class Invoker {
      */
     public void undo(){
         if(!undoStack.empty()){
-            Undoable cm = undoStack.pop();
+            UndoableCommand cm = undoStack.pop();
             cm.undo();
             redoStack.push(cm);
         }else {
@@ -59,7 +59,7 @@ public class Invoker {
      */
     public void redo(){
         if(!redoStack.empty()) {
-            Undoable cm = redoStack.pop();
+            UndoableCommand cm = redoStack.pop();
             cm.execute();
             undoStack.push(cm);
         }else{
