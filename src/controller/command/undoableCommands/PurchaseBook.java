@@ -1,8 +1,9 @@
 package controller.command.undoableCommands;
 
-import controller.command.UndoableCommand;
+import controller.command.Command;
+import controller.command.Undoable;
 
-public class PurchaseBook implements UndoableCommand {
+public class PurchaseBook implements Undoable, Command {
 
     public PurchaseBook(String[] args) {
     }

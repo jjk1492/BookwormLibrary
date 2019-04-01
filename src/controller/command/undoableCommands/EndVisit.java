@@ -1,13 +1,14 @@
 package controller.command.undoableCommands;
 
-import controller.command.UndoableCommand;
+import controller.command.Command;
+import controller.command.Undoable;
 import model.BookwormLibrary;
 import model.Visit;
 
 /**
  * End a visit Command
  */
-public class EndVisit implements UndoableCommand {
+public class EndVisit implements Undoable, Command {
 
     private Long clientID;
     private Long visitorID;

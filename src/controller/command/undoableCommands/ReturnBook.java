@@ -1,6 +1,7 @@
 package controller.command.undoableCommands;
 
-import controller.command.UndoableCommand;
+import controller.command.Command;
+import controller.command.Undoable;
 import model.BookwormLibrary;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Return a book to the library Command
  */
-public class ReturnBook implements UndoableCommand {
+public class ReturnBook implements Undoable, Command {
 
     private Long clientID;
     private Long visitorID;
@@ -36,22 +37,6 @@ public class ReturnBook implements UndoableCommand {
 
     @Override
     public void redo() {
-
+        BookwormLibrary.getInstance().checkIn(visitorID, bookIDs);
     }
-
-
-
-    /*@Override
-    public String runCommand(String[] args) {
-        if (args.length >= 3) {
-            ArrayList < String > ids = new ArrayList < > ();
-            for (int i = 2; i <= args.length - 1; i++) {
-                ids.add(args[i]);
-            }
-
-            return "return," + library.checkIn(args[1], ids) + ";";
-        } else {
-            return "return,missing-parameters,{visitorID,id[,id]};";
-        }
-    }*/
 }
