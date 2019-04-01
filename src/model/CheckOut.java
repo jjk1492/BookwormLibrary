@@ -14,7 +14,7 @@ public class CheckOut {
     private static final double MAX_FINE = 30.00;
 
     private Book book;
-    private String visitorId;
+    private Long visitorId;
     private Calendar dueDate;
     private Calendar checkedDate;
 
@@ -25,7 +25,7 @@ public class CheckOut {
      * @param visitorId ID of who checked out the book
      * @param dueDate date book is due
      */
-    public CheckOut(Book book, String visitorId, Calendar dueDate) {
+    CheckOut(Book book, Long visitorId, Calendar dueDate) {
         this.book = book;
         this.visitorId = visitorId;
         this.dueDate = dueDate;
@@ -69,7 +69,7 @@ public class CheckOut {
      * Visitor who has checked out this book
      * @return Unique ID of visitor
      */
-    public String getVisitorId() {
+    public Long getVisitorId() {
         return visitorId;
     }
 

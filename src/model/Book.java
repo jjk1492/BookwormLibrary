@@ -1,15 +1,18 @@
 package model;
 
+import model.bookSearch.Queryable;
+import model.bookSearch.Query;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * A book belonging to the controller.BookwormLibrary. Books are created when their purchased, or loaded in from persistent data.
+ * A book belonging to the model.BookwormLibrary. Books are created when their purchased, or loaded in from persistent data.
  *
  * @author John Knecht V (jjk1492@rit.edu)
  */
-public class Book {
+public class Book implements Queryable {
 
     //Required book data
     private String title;
@@ -77,8 +80,12 @@ public class Book {
      * Get this books published date
      * @return String representation of published date
      */
-    public String getPublishDate() {
+    public String getPublishDateAsString() {
         return new SimpleDateFormat("yyyy-MM-dd").format(this.publishDate);
+    }
+
+    public Date getPublishDate(){
+        return this.publishDate;
     }
 
     /**
@@ -129,5 +136,10 @@ public class Book {
      */
     public void addCopies(int amount) {
         this.numberOfCopies += amount;
+    }
+
+    @Override
+    public void doQuery(Query q) {
+        q.query(this);
     }
 }

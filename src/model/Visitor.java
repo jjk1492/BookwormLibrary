@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,13 @@ public class Visitor {
     private String lastName;
     private String address;
     private String phoneNumber;
-    private String userID;
+    private Long userID;
+    private LocalDateTime timeOfCreation;
+
+    //Account information
+    private String username;
+    private String password;
+    private boolean isEmployee;
 
     private double fine = 0.0;
     /**
@@ -25,19 +32,24 @@ public class Visitor {
      * @param phoneNumber Visitor's phone number
      * @param userID Unique 10 digit ID
      */
-    public Visitor(String firstName, String lastName, String address, String phoneNumber, String userID) {
+    Visitor(String firstName, String lastName, String address, String phoneNumber, Long userID, LocalDateTime time) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.userID = userID;
+        this.timeOfCreation = time.plusNanos(0);
+    }
+
+    public LocalDateTime getTimeOfCreation() {
+        return timeOfCreation;
     }
 
     /**
      * Get this Visitor's ID.
      * @return - The userID String.
      */
-    public String getUserID() {
+    public Long getUserID() {
         return userID;
     }
 
@@ -45,8 +57,15 @@ public class Visitor {
      * Pay user fine in amount
      * @param amount amount to pay
      */
-    public void payFine(double amount) {
-        fine -= amount;
+    public boolean payFine(double amount) {
+        boolean successful = false;
+
+        if( fine - amount >= 0){
+            fine -= amount;
+            successful = true;
+        }
+
+        return successful;
     }
 
     /**
@@ -65,10 +84,28 @@ public class Visitor {
         this.fine += amount;
     }
 
+    public boolean hasAccount(){
+        return username != null;
+    }
+
+    public void updateAccount(String username, String password, boolean isEmployee){
+        this.username = username;
+        this.password = password;
+        this.isEmployee = isEmployee;
+    }
+
+    public boolean checkPassword(String password){
+        return this.password.equals(password);
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
     /**
      *
      * @param o - Object being compared to this Visitor
-     * @return
+     * @return true if is equal, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -83,9 +120,7 @@ public class Visitor {
 
     @Override
     public String toString(){
-        String str = this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber +
-                " " + this.userID;
-        return str;
+        return this.firstName + " " +  this.lastName + " " + this.address + " " + this.phoneNumber + " " + this.userID;
     }
 
     /**
