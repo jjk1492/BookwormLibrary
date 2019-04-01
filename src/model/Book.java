@@ -80,8 +80,12 @@ public class Book implements Queryable {
      * Get this books published date
      * @return String representation of published date
      */
-    public String getPublishDate() {
+    public String getPublishDateAsString() {
         return new SimpleDateFormat("yyyy-MM-dd").format(this.publishDate);
+    }
+
+    public Date getPublishDate(){
+        return this.publishDate;
     }
 
     /**

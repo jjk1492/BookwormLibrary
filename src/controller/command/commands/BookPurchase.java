@@ -1,37 +1,25 @@
 package controller.command.commands;
 
 import controller.command.Command;
+import model.BookwormLibrary;
 
 /**
  * Purchase a book from catalogue Command
  */
 public class BookPurchase implements Command {
 
-    public BookPurchase() {
+    private String[] commandArgs;
+
+    public BookPurchase(String[] commandargs) {
+        this.commandArgs = commandargs;
     }
 
     @Override
     public void execute() {
-
-    }
-
-    /*@Override
-    public String runCommand(String[] args) {
-        if (args.length >= 3) {
-            int quantity = Integer.parseInt(args[1]);
-            int n = 0;
-            String beginning = "buy,success,";
-            String books = "";
-
-            for (int i = 2; i <= args.length - 1; i++) {
-                books += library.buyBook(args[i], quantity) + "\n";
-                n += 1;
-            }
-
-            beginning += (n + "\n");
-            return beginning + books.substring(0, books.length() - 1);
+        int quantity = Integer.parseInt(this.commandArgs[2]);
+        BookwormLibrary library = BookwormLibrary.getInstance();
+        for( int i=3; i<this.commandArgs.length; i++){
+            library.buyBook(this.commandArgs[i], quantity);
         }
-
-        return "buy,missing-parameters,{quantity,id[,ids]};";
-    }*/
+    }
 }
